@@ -24,7 +24,7 @@ public class User {
     Map<String, String> location;
     String[] hobby;
 
-    public User( ) {
+    public User() {
 
     }
 
@@ -46,63 +46,63 @@ public class User {
         this.hobby = hobby;
     }
 
-    public String getId( ) {
+    public String getId() {
         return id;
     }
 
-    public String getUserName( ) {
+    public String getUserName() {
         return userName;
     }
 
-    public String getEmail( ) {
+    public String getEmail() {
         return email;
     }
 
-    public String getGender( ) {
+    public String getGender() {
         return gender;
     }
 
-    public String getNickName( ) {
+    public String getNickName() {
         return nickName;
     }
 
-    public String getPassword( ) {
+    public String getPassword() {
         return password;
     }
 
-    public String getSummary( ) {
+    public String getSummary() {
         return summary;
     }
 
-    public String getMaritalStatus( ) {
+    public String getMaritalStatus() {
         return maritalStatus;
     }
 
-    public String getBirthday( ) {
+    public String getBirthday() {
         return birthday;
     }
 
-    public String[] getFollower( ) {
+    public String[] getFollower() {
         return follower;
     }
 
-    public String[] getFollowed( ) {
+    public String[] getFollowed() {
         return followed;
     }
 
-    public String getFirstName( ) {
+    public String getFirstName() {
         return firstName;
     }
 
-    public String getLastName( ) {
+    public String getLastName() {
         return lastName;
     }
 
-    public Map<String, String> getLocation( ) {
+    public Map<String, String> getLocation() {
         return location;
     }
 
-    public String[] getHobby( ) {
+    public String[] getHobby() {
         return hobby;
     }
 
