@@ -1,0 +1,42 @@
+[
+    //User: 
+    {
+        "id": "object ID",
+        "Username": "str, username, 10 char, english+digit, start with alphabet",
+        "Email": "str, 123@mail.com, illegal email, maximum 128",
+        "Gender": "str, male/female",
+        "Nickname": "str, 10 char,  english+digit, start with alphabet",
+        "Password": "str, at least 8 char, alphabet + special character + digit",
+        "Summary": "str, most 200 char",
+        "Maritalstatus": "str, single/married",
+        "Birthday": "str, utc-type",
+        "Follower": ["id1", "..."],
+        "Followed": ["id1", "..."],
+        "firstname": "str, maximum 50",
+        "lastname": "str, maximum 50",
+        "location": {
+            "st": "street"
+        },
+        "hobby": ["hobby 1", "hobby 2"]
+        //empty1-10
+    },
+    {
+        "id": "object ID",
+        //"Title": " ",
+        "Content": "str, most 200 char",
+        "Author": "nickname",
+        "Authorid": " user object id",
+        "Time": "",
+        "status": 0//0 only me, 1 only friend, 2 public
+    },
+    {
+        "Id": "object ID",
+        "Author": "nickname",
+        "Authorid": " user object id",
+        "Content": "str, most 100 char",
+        "Shareid": "share object id",
+        "Like_num": 0, //int
+        "Time": ""
+        //empty1-10
+    }
+]
