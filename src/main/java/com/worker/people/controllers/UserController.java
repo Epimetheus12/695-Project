@@ -4,6 +4,8 @@ package com.worker.people.controllers;
 import com.worker.people.domain.entities.User;
 import com.worker.people.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,10 +38,52 @@ public class UserController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public User getUserById(@PathVariable String id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()){
-            return user.get();
+        return user.orElseGet(User::new);
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<User> updateTutorial(@PathVariable("id") String id, @RequestBody User user){
+        Optional<User> userData = userRepository.findById(id);
+
+        if (userData.isPresent()){
+            User _user = userData.get();
+            _user.setUserName(user.getUserName());
+            _user.setEmail(user.getEmail());
+            _user.setGender(user.getGender());
+            _user.setNickName(user.getNickName());
+            _user.setPassword(user.getPassword());
+            _user.setSummary(user.getSummary());
+            _user.setMaritalStatus(user.getMaritalStatus());
+            _user.setBirthday(user.getBirthday());
+            _user.setFirstName(user.getFirstName());
+            _user.setLastName(user.getLastName());
+            _user.setLocation(user.getLocation());
+            _user.setHobby(user.getHobby());
+
+            return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new User();
+    }
+
+    @DeleteMapping("/users")
+    public ResponseEntity<HttpStatus> deleteAllUsers(){
+        try{
+            userRepository.deleteAll();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id){
+        try{
+            userRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
