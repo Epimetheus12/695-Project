@@ -24,7 +24,7 @@ public class User {
     Map<String, String> location;
     String[] hobby;
 
-    public User() {
+    public User( ) {
 
     }
 
@@ -54,7 +54,111 @@ public class User {
         return userName;
     }
 
+    public String getEmail( ) {
+        return email;
+    }
+
+    public String getGender( ) {
+        return gender;
+    }
+
+    public String getNickName( ) {
+        return nickName;
+    }
+
+    public String getPassword( ) {
+        return password;
+    }
+
+    public String getSummary( ) {
+        return summary;
+    }
+
+    public String getMaritalStatus( ) {
+        return maritalStatus;
+    }
+
+    public String getBirthday( ) {
+        return birthday;
+    }
+
+    public String[] getFollower( ) {
+        return follower;
+    }
+
+    public String[] getFollowed( ) {
+        return followed;
+    }
+
+    public String getFirstName( ) {
+        return firstName;
+    }
+
+    public String getLastName( ) {
+        return lastName;
+    }
+
+    public Map<String, String> getLocation( ) {
+        return location;
+    }
+
+    public String[] getHobby( ) {
+        return hobby;
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setFollower(String[] follower) {
+        this.follower = follower;
+    }
+
+    public void setFollowed(String[] followed) {
+        this.followed = followed;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setLocation(Map<String, String> location) {
+        this.location = location;
+    }
+
+    public void setHobby(String[] hobby) {
+        this.hobby = hobby;
     }
 }
