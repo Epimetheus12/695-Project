@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value="/api2")
+@RequestMapping(value="/api")
 public class ShareController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class ShareController {
 
     Logger LOG = LoggerFactory.getLogger(getClass());
 
-    @RequestMapping(value="/{id}",method = RequestMethod.GET)
+    @RequestMapping(value="/share/{id}",method = RequestMethod.GET)
     public Share getShareById(@PathVariable("id") String shareId){
         //find share by share id
         LOG.info("Getting Share with ID : {}",shareId);
@@ -29,7 +29,7 @@ public class ShareController {
         return share.orElseGet(Share::new);
     }
 
-    @RequestMapping(method = RequestMethod.POST,value="/saveshare")
+    @RequestMapping(method = RequestMethod.POST,value="/share/create")
     public Share save(@RequestBody Share share){
         //save a new share
         shareRepository.save(share);
@@ -49,7 +49,7 @@ public class ShareController {
     }
     */
 
-    @DeleteMapping(value = "/deleteshare/{id}")
+    @RequestMapping(value = "/share/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") String shareId){
         // delete a share through share id
         try{
@@ -60,8 +60,8 @@ public class ShareController {
         }
     }
 
-    @GetMapping(value = "/{userid}/shares")
-    public List<Share> getShareByUser(@PathVariable("userid") String userId){
+    @RequestMapping(value = "/share/user/{id}", method = RequestMethod.GET)
+    public List<Share> getShareByUser(@PathVariable("id") String userId){
         //find shares by user id
         return shareRepository.findByAuthorId(userId);
     }

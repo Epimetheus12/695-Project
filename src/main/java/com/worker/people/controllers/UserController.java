@@ -23,25 +23,25 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/users")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/all")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/createUser")
+    @RequestMapping(method = RequestMethod.POST, value = "/user/create")
     public User save(@RequestBody User user){
         userRepository.save(user);
 
         return user;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public User getUserById(@PathVariable String id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElseGet(User::new);
     }
 
-    @PutMapping("/users/{id}")
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public ResponseEntity<User> updateTutorial(@PathVariable("id") String id, @RequestBody User user){
         Optional<User> userData = userRepository.findById(id);
 
@@ -66,25 +66,24 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users")
-    public ResponseEntity<HttpStatus> deleteAllUsers(){
+    @RequestMapping(value = "/user/deleteAll", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteAllUsers(){
         try{
             userRepository.deleteAll();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Delete succeeded", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Delete failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id){
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteUser(@PathVariable("id") String id){
         try{
             userRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Delete succeeded", HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Delete failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
 }

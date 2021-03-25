@@ -1,13 +1,13 @@
-//package com.worker.people;
+package com.worker.people;
 
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-//@SpringBootTest
-//class PeopleApplicationTests {
+@SpringBootTest
+class PeopleApplicationTests {
 
-   // @Test
-    //void contextLoads( ) {
-    //}
+    @Test
+    void contextLoads( ) {
+    }
 
-//}
+}

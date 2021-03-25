@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
-//    void finOne(User findOne);
+    //    void finOne(User findOne);
 }

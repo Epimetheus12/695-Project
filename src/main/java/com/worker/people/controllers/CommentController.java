@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api3")
+@RequestMapping(value = "/api")
 public class CommentController {
 
     @Autowired
@@ -21,26 +21,26 @@ public class CommentController {
         this.commentRepository = commentRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/comments")
+    @RequestMapping(method = RequestMethod.GET, value = "/comment/all")
     public List<Comment> getAllComments() {
         return commentRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/createComment")
+    @RequestMapping(method = RequestMethod.POST, value = "/comment/create")
     public Comment save(@RequestBody Comment comment){
         commentRepository.save(comment);
 
         return comment;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
     public Comment getCommentById(@PathVariable String id) {
         Optional<Comment> comment;
         comment = commentRepository.findById(id);
         return comment.orElseGet(Comment::new);
     }
 
-    @PutMapping("/comments/{id}")
+    @RequestMapping(value = "/comment/{id}",method = RequestMethod.PUT)
     public ResponseEntity<Comment> updateTutorial(@PathVariable("id") String id, @RequestBody Comment comment){
         Optional<Comment> commentData = commentRepository.findById(id);
 
@@ -60,7 +60,7 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/comments/{id}")
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<HttpStatus> deleteComment(@PathVariable("id") String id){
         try{
             commentRepository.deleteById(id);
