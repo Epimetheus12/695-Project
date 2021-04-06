@@ -2,38 +2,48 @@ package com.worker.people.domain.entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Map;
+import java.util.Set;
 
 @Document(collection = "users")
-public class User {
+public class User implements UserDetails {
     @Id
-    String id;
-    String userName;
-    String email;
-    String gender;
-    String nickName;
-    String password;
-    String summary;
-    String maritalStatus;
-    String birthday;
-    String[] follower;
-    String[] followed;
-    String firstName;
-    String lastName;
-    Map<String, String> location;
-    String[] hobby;
+    private String id;
+    private String username;
+    private String email;
+    private String gender;
+    private String nickname;
+    private String password;
+    private String summary;
+    private String maritalStatus;
+    private String birthday;
+    private String[] follower;
+    private String[] followed;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private String city;
+    private String[] hobby;
+    private String picURl;
+    private Set<Role> authorities;
 
-    public User() {
+    private boolean isAccountNonExpired;
+    private boolean isAccountNonLocked;
+    private boolean isCredentialsNonExpired;
+    private boolean isEnabled;
+
+
+    public User( ) {
 
     }
 
-    public User(String id, String userName, String email, String gender, String nickName, String password, String summary, String maritalStatus, String birthday, String[] follower, String[] followed, String firstName, String lastName, Map<String, String> location, String[] hobby) {
+    public User(String id, String username, String email, String gender, String nickname, String password, String summary, String maritalStatus, String birthday, String[] follower, String[] followed, String firstName, String lastName, String address, String city, String[] hobby, String picURl, Set<Role> authorities) {
         this.id = id;
-        this.userName = userName;
+        this.username = username;
         this.email = email;
         this.gender = gender;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.password = password;
         this.summary = summary;
         this.maritalStatus = maritalStatus;
@@ -42,72 +52,101 @@ public class User {
         this.followed = followed;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.location = location;
+        this.address = address;
+        this.city = city;
         this.hobby = hobby;
+        this.picURl = picURl;
+        this.authorities = authorities;
+
+
     }
 
-    public String getId() {
+    public String getId( ) {
         return id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername( ) {
+        return username;
     }
 
-    public String getEmail() {
+    @Override
+    public boolean isAccountNonExpired( ) {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked( ) {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired( ) {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled( ) {
+        return true;
+    }
+
+    public String getEmail( ) {
         return email;
     }
 
-    public String getGender() {
+    public String getGender( ) {
         return gender;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname( ) {
+        return nickname;
     }
 
-    public String getPassword() {
+    public String getPassword( ) {
         return password;
     }
 
-    public String getSummary() {
+    public String getSummary( ) {
         return summary;
     }
 
-    public String getMaritalStatus() {
+    public String getMaritalStatus( ) {
         return maritalStatus;
     }
 
-    public String getBirthday() {
+    public String getBirthday( ) {
         return birthday;
     }
 
-    public String[] getFollower() {
+    public String[] getFollower( ) {
         return follower;
     }
 
-    public String[] getFollowed() {
+    public String[] getFollowed( ) {
         return followed;
     }
 
-    public String getFirstName() {
+    public String getFirstName( ) {
         return firstName;
     }
 
-    public String getLastName() {
+    public String getLastName( ) {
         return lastName;
     }
 
-    public Map<String, String> getLocation() {
-        return location;
+    public String getAddress( ) {
+        return address;
     }
 
-    public String[] getHobby() {
+    public String getCity( ) {
+        return city;
+    }
+
+    public String[] getHobby( ) {
         return hobby;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setEmail(String email) {
@@ -118,8 +157,8 @@ public class User {
         this.gender = gender;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public void setPassword(String password) {
@@ -154,11 +193,47 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setLocation(Map<String, String> location) {
-        this.location = location;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public void setHobby(String[] hobby) {
         this.hobby = hobby;
+    }
+
+    public String getPicURl( ) {
+        return picURl;
+    }
+
+    public void setPicURl(String picURl) {
+        this.picURl = picURl;
+    }
+
+    public Set<Role> getAuthorities( ) {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Role> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        isAccountNonExpired = accountNonExpired;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        isAccountNonLocked = accountNonLocked;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        isCredentialsNonExpired = credentialsNonExpired;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }
