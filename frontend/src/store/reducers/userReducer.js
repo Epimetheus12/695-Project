@@ -18,8 +18,8 @@ import {
     SEARCH_RESULTS_SUCCESS, SEARCH_RESULTS_BEGIN, SEARCH_RESULTS_ERROR,
 } from '../actions/actionTypes';
 
-import placeholder_user_image from '';
-import default_background_image from '';
+import placeholder_user_image from '../../assets/images/placeholder.png';
+import default_background_image from '../../assets/images/default-background-image.jpg';
 
 // loggedInUserDataReducer
 const initialStateLoggedInUserData = {
@@ -41,6 +41,11 @@ const initialStateLoggedInUserData = {
     status: '',
     path: '',
     loading: false,
+    password:'',
+    nickname:'',
+    maritalStatus:'',
+    gender:'',
+    birthday:'',
 }
 
 const loggedInUserDataReducer = (state = initialStateLoggedInUserData, action) => {
@@ -101,10 +106,13 @@ const initialStateTimeLineUserData = {
     firstName: '',
     lastName: '',
     address: '',
+    password:'',
+    nickname:'',
+    maritalStatus:'',
     city: '',
     search: '',
     category: '',
-    profilePicUrl: placeholder_user_image,
+    picURl: placeholder_user_image,
     backgroundImageUrl: default_background_image,
     authority: '',
     hasError: false,
@@ -113,6 +121,8 @@ const initialStateTimeLineUserData = {
     status: '',
     path: '',
     loading: false,
+    gender:'',
+    birthday:'',
 }
 
 const timeLineUserDataReducer = (state = initialStateTimeLineUserData, action) => {
@@ -525,6 +535,11 @@ const initialStateChangeTimeLineUserData = {
     status: '',
     path: '',
     loading: false,
+    password:'',
+    nickname:'',
+    maritalStatus:'',
+    gender:'',
+    birthday:'',
 }
 
 const changeTimeLineUserDataReducer = (state = initialStateChangeTimeLineUserData, action) => {

@@ -20,7 +20,7 @@ const logoutAction = require('./store/actions/authActions').logoutAction();
 const StartPage = lazy(() => import('./components/authPage/StartPage'))
 const RegisterPage = lazy(() => import('./components/authPage/RegisterPage'))
 const LoginPage = lazy(() => import('./components/authPage/LoginPage'))
-// const HomePage = lazy(() => import('./components/homePage/HomePage'))
+const HomePage = lazy(() => import('./components/home/HomePage'))
 // const ErrorPage = lazy(() => import('./components/common/ErrorPage'))
 
 class App extends Component {
@@ -61,7 +61,7 @@ class App extends Component {
               <Route exact path="/" component={StartPage} />
               {!loggedIn && <Route exact path="/register" component={RegisterPage} />}
               {!loggedIn && <Route exact path="/login" component={LoginPage} />}
-              {/*{loggedIn && <Route path="/home" component={HomePage} />}*/}
+              {loggedIn && <Route path="/home/:id" component={HomePage} />}
               {/*<Route exact path="/error" component={ErrorPage} />*/}
               {/*<Route component={ErrorPage} />*/}
             </Switch>

@@ -4,6 +4,7 @@ import com.worker.people.utils.ValidationMessage;
 import com.worker.people.validations.Password;
 import com.worker.people.validations.UniqueEmail;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -12,6 +13,8 @@ import java.io.Serializable;
 
 public class UserUpdateModel implements Serializable {
 
+    private String id;
+    private String username;
     private String email;
     private String nickname;
     private String password;
@@ -25,17 +28,47 @@ public class UserUpdateModel implements Serializable {
     private String city;
     private String[] hobby;
     private String picURl;
+    private String backgroundImageUrl;
+    private String gender;
+    private String birthday;
 
     public UserUpdateModel( ) {
     }
 
+    @NotNull(message = ValidationMessage.ID_REQUIRED_MESSAGE)
+    @Length(min = 1, message = ValidationMessage.ID_REQUIRED_MESSAGE)
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Pattern(regexp = "^([a-zA-Z0-9]+)$")
+    @Size(min = 4, max = 16, message = ValidationMessage.USER_INVALID_USERNAME_MESSAGE)
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     @Pattern(regexp = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", message = ValidationMessage.USER_INVALID_EMAIL_MESSAGE)
-    @UniqueEmail
     public String getEmail( ) {
         return email;
     }
 
+    @Pattern(regexp = "(male|female)", message = "Invalid gender")
+    public String getGender( ) {
+        return gender;
+    }
+
+    @DateTimeFormat
+    public String getBirthday( ) {
+        return birthday;
+    }
 
     @Pattern(regexp = "^([a-zA-Z0-9]+)$")
     @Size(min = 4, max = 16, message = "Invalid nickname")
@@ -95,6 +128,8 @@ public class UserUpdateModel implements Serializable {
         return picURl;
     }
 
+    public String getBackgroundImageUrl(){return backgroundImageUrl;}
+
 
     public void setEmail(String email) {
         this.email = email;
@@ -147,5 +182,17 @@ public class UserUpdateModel implements Serializable {
 
     public void setPicURl(String picURl) {
         this.picURl = picURl;
+    }
+
+    public void setBackgroundImageUrl(String backgroundImageUrl) {
+        this.backgroundImageUrl = backgroundImageUrl;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

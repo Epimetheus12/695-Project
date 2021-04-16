@@ -103,7 +103,7 @@ const updateLoggedInUserDataAction = (userData) => {
 const fetchLoggedInUserAction = (userId) => {
     return (dispatch) => {
         dispatch(fetchLoggedInUserBegin())
-        return requester.get(`/users/details/${userId}`, (response) => {
+        return requester.get(`/api/user/details/${userId}`, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(fetchLoggedInUserError(error, message, status, path));
@@ -154,7 +154,7 @@ const updateTimeLineUserDataAction = (userData) => {
 const fetchTimeLineUserAction = (userId) => {
     return (dispatch) => {
         dispatch(fetchTimeLineUserBegin())
-        return requester.get(`/users/details/${userId}`, (response) => {
+        return requester.get(`/api/users/details/${userId}`, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(fetchTimeLineUserError(error, message, status, path));
@@ -197,9 +197,9 @@ const changeCurrentTimeLineUserError = (error, message, status, path) => {
 const changeCurrentTimeLineUserAction = (userId) => {
     return (dispatch) => {
         dispatch(changeCurrentTimeLineUserBegin())
-        return requester.get(`/users/details/${userId}`, (response) => {
+        return requester.get(`/api/user/details/${userId}`, (response) => {
             if (response.error) {
-                const { error, message, status, path } = response;
+                const {error, message, status, path} = response;
                 dispatch(changeCurrentTimeLineUserError(error, message, status, path));
             } else {
                 dispatch(updateTimeLineUserDataAction(response));
@@ -210,8 +210,8 @@ const changeCurrentTimeLineUserAction = (userId) => {
                 localStorage.clear();
             }
             dispatch(changeCurrentTimeLineUserError('', `Error: ${err.message}`, err.status, ''));
-        })
-    }
+        });
+    };
 }
 
 // fetchAllFriends
@@ -337,8 +337,9 @@ const updateUserAction = (loggedInUserId, otherProps) => {
 
     return (dispatch) => {
         dispatch(updateUserBegin())
-        return requester.put('/users/update/' + loggedInUserId, { ...otherProps }, (response) => {
+        return requester.put('/api/user/update/' + loggedInUserId, { ...otherProps }, (response) => {
             if (response.error) {
+                console.log("updateerr")
                 const { error, message, status, path } = response;
                 dispatch(updateUserError(error, message, status, path));
             } else {
@@ -349,6 +350,7 @@ const updateUserAction = (loggedInUserId, otherProps) => {
                 dispatch(updateUserSuccess(response));
             }
         }).catch(err => {
+            console.log("epdateerr2")
             if (err.status === 403 && err.message === 'Your JWT token is expired. Please log in!') {
                 localStorage.clear();
             }

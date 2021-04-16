@@ -145,6 +145,10 @@ public class User implements UserDetails {
         return hobby;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }

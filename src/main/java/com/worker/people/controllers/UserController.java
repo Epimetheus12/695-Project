@@ -3,14 +3,14 @@ package com.worker.people.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worker.people.domain.entities.User;
-import com.worker.people.domain.models.RegisterModel;
-import com.worker.people.domain.models.UserCreateViewModel;
-import com.worker.people.domain.models.UserServiceModel;
+import com.worker.people.domain.models.*;
 import com.worker.people.repositories.UserRepository;
 import com.worker.people.services.UserService;
+import com.worker.people.utils.CustomException;
 import com.worker.people.utils.responses.BadRequestException;
 import com.worker.people.utils.responses.SuccessResponse;
 import com.worker.people.validations.UserValidation;
+import com.worker.people.validations.serviceValidation.services.UserValidationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,15 +33,17 @@ public class UserController {
     private final ObjectMapper objectMapper;
     private final UserValidation userValidation;
     private final UserRepository userRepository;
+    private final UserValidationService userValidationService;
 
 
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper, ObjectMapper objectMapper, UserValidation userValidation, UserRepository userRepository) {
+    public UserController(UserService userService, ModelMapper modelMapper, ObjectMapper objectMapper, UserValidation userValidation, UserRepository userRepository,UserValidationService userValidationService) {
         this.userService = userService;
         this.modelMapper = modelMapper;
         this.objectMapper = objectMapper;
         this.userValidation= userValidation;
         this.userRepository = userRepository;
+        this.userValidationService = userValidationService;
     }
 
 
@@ -82,29 +84,50 @@ public class UserController {
         return user.orElseGet(User::new);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<User> updateTutorial(@PathVariable("id") String id, @RequestBody User user){
-        Optional<User> userData = userRepository.findById(id);
+//    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+//    public ResponseEntity<User> updateTutorial(@PathVariable("id") String id, @RequestBody User user){
+//        Optional<User> userData = userRepository.findById(id);
+//
+//        if (userData.isPresent()){
+//            User _user = userData.get();
+//            _user.setUsername(user.getUsername());
+//            _user.setEmail(user.getEmail());
+//            _user.setGender(user.getGender());
+//            _user.setNickname(user.getNickname());
+//            _user.setPassword(user.getPassword());
+//            _user.setSummary(user.getSummary());
+//            _user.setMaritalStatus(user.getMaritalStatus());
+//            _user.setBirthday(user.getBirthday());
+//            _user.setFirstName(user.getFirstName());
+//            _user.setLastName(user.getLastName());
+//            _user.setAddress(user.getAddress());
+//            _user.setHobby(user.getHobby());
+//
+//            return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+//        }else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
-        if (userData.isPresent()){
-            User _user = userData.get();
-            _user.setUsername(user.getUsername());
-            _user.setEmail(user.getEmail());
-            _user.setGender(user.getGender());
-            _user.setNickname(user.getNickname());
-            _user.setPassword(user.getPassword());
-            _user.setSummary(user.getSummary());
-            _user.setMaritalStatus(user.getMaritalStatus());
-            _user.setBirthday(user.getBirthday());
-            _user.setFirstName(user.getFirstName());
-            _user.setLastName(user.getLastName());
-            _user.setAddress(user.getAddress());
-            _user.setHobby(user.getHobby());
-
-            return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @RequestMapping(value = "/update/{id}",method = RequestMethod.PUT)
+    public ResponseEntity<Object> updateUser(@RequestBody @Valid UserUpdateModel userUpdateModel,
+                                             @PathVariable(value = "id") String loggedInUserId) throws Exception{
+        if(!userValidationService.isValid(userUpdateModel)){
+            throw new Exception(SERVER_ERROR_MESSAGE);
         }
+        UserServiceModel userServiceModel = this.modelMapper.map(userUpdateModel,UserServiceModel.class);
+        boolean result = this.userService.updateUser(userServiceModel,loggedInUserId);
+        if (result) {
+            SuccessResponse successResponse = successResponseBuilder(LocalDateTime.now(), SUCCESSFUL_USER_PROFILE_EDIT_MESSAGE, "", true);
+            return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);
+        }
+        throw new CustomException(SERVER_ERROR_MESSAGE);
+    }
+
+    @GetMapping(value = "/details/{id}")
+    public ResponseEntity<Object> getDatils(@PathVariable String id) throws Exception{
+        UserDetailsViewModel user = this.userService.getById(id);
+        return new ResponseEntity<>(this.objectMapper.writeValueAsString(user),HttpStatus.OK);
     }
 
     @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
