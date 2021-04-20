@@ -1,13 +1,17 @@
-import React, { Component, Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
-import { userService } from '../../infrastructure';
-import { toast } from 'react-toastify';
-import { ToastComponent } from '../common';
+import React, {Component, Fragment} from 'react';
+import {NavLink} from 'react-router-dom';
+import {userService} from '../../infrastructure';
+import {toast} from 'react-toastify';
+import {ToastComponent} from '../common';
 import '../../styles/FormPages.css';
 
-import { connect } from 'react-redux';
-import { updateUserAction, changeCurrentTimeLineUserAction, changeAllFriendsAction } from '../../store/actions/userActions';
-import { changeAllPicturesAction } from '../../store/actions/pictureActions';
+import {connect} from 'react-redux';
+import {
+    updateUserAction,
+    changeCurrentTimeLineUserAction,
+    changeAllFriendsAction
+} from '../../store/actions/userActions';
+import {changeAllPicturesAction} from '../../store/actions/pictureActions';
 import Input from "@material-ui/core/Input";
 import {IconButton, InputAdornment} from "@material-ui/core";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -31,11 +35,13 @@ class UserEditPage extends Component {
             city: this.props.timeLineUserData.city,
             picURl: this.props.timeLineUserData.picURl,
             backgroundImageUrl: this.props.timeLineUserData.backgroundImageUrl,
-            password:this.props.timeLineUserData.password,
-            nickname:this.props.timeLineUserData.nickname,
-            maritalStatus:this.props.timeLineUserData.maritalStatus,
-            gender:this.props.timeLineUserData.gender,
-            birthday:this.props.timeLineUserData.birthday,
+            password: this.props.timeLineUserData.password,
+            nickname: this.props.timeLineUserData.nickname,
+            maritalStatus: this.props.timeLineUserData.maritalStatus,
+            gender: this.props.timeLineUserData.gender,
+            birthday: this.props.timeLineUserData.birthday,
+            follower: this.props.timeLineUserData.follower,
+            followed: this.props.timeLineUserData.followed,
             touched: {
                 username: false,
                 email: false,
@@ -48,8 +54,10 @@ class UserEditPage extends Component {
                 password: false,
                 nickname: false,
                 maritalStatus: false,
-                gender:false,
-                birthday:false,
+                gender: false,
+                birthday: false,
+                followed: true,
+                follower: true,
             }
         }
 
@@ -61,7 +69,9 @@ class UserEditPage extends Component {
 
     componentDidMount = () => {
         const currentTimeLineUserId = this.props.match.params.id
+        console.log('start user edit page')
         if (currentTimeLineUserId !== this.props.timeLineUserData.id) {
+            console.log('start change time line user')
             this.props.changeTimeLineUser(currentTimeLineUserId);
             this.props.changeAllPictures(currentTimeLineUserId);
             this.props.changeAllFriends(currentTimeLineUserId);
@@ -83,11 +93,13 @@ class UserEditPage extends Component {
                 city: this.props.timeLineUserData.city,
                 picURl: this.props.timeLineUserData.picURl,
                 backgroundImageUrl: this.props.timeLineUserData.backgroundImageUrl,
-                password:this.props.timeLineUserData.password,
-                nickname:this.props.timeLineUserData.nickname,
-                maritalStatus:this.props.timeLineUserData.maritalStatus,
-                gender:this.props.timeLineUserData.gender,
-                birthday:this.props.timeLineUserData.birthday,
+                password: this.props.timeLineUserData.password,
+                nickname: this.props.timeLineUserData.nickname,
+                maritalStatus: this.props.timeLineUserData.maritalStatus,
+                gender: this.props.timeLineUserData.gender,
+                birthday: this.props.timeLineUserData.birthday,
+                follower: this.props.timeLineUserData.follower,
+                followed: this.props.timeLineUserData.followed,
             })
         }
 
@@ -95,7 +107,7 @@ class UserEditPage extends Component {
         const successMessage = this.getSuccessMessage(prevProps)
 
         if (errorMessage) {
-            toast.error(<ToastComponent.errorToast text={errorMessage} />, {
+            toast.error(<ToastComponent.errorToast text={errorMessage}/>, {
                 position: toast.POSITION.TOP_RIGHT
             });
 
@@ -109,14 +121,16 @@ class UserEditPage extends Component {
                 city: this.props.timeLineUserData.city,
                 picURl: this.props.timeLineUserData.picURl,
                 backgroundImageUrl: this.props.timeLineUserData.backgroundImageUrl,
-                password:this.props.timeLineUserData.password,
-                nickname:this.props.timeLineUserData.nickname,
-                maritalStatus:this.props.timeLineUserData.maritalStatus,
+                password: this.props.timeLineUserData.password,
+                nickname: this.props.timeLineUserData.nickname,
+                maritalStatus: this.props.timeLineUserData.maritalStatus,
                 gender: this.props.timeLineUserData.gender,
-                birthday:this.props.timeLineUserData.birthday,
+                birthday: this.props.timeLineUserData.birthday,
+                follower: this.props.timeLineUserData.follower,
+                followed: this.props.timeLineUserData.followed,
             })
         } else if (successMessage) {
-            toast.success(<ToastComponent.successToast text={successMessage} />, {
+            toast.success(<ToastComponent.successToast text={successMessage}/>, {
                 position: toast.POSITION.TOP_RIGHT
             });
             this.props.history.push(`/home/profile/${this.state.id}`);
@@ -144,11 +158,11 @@ class UserEditPage extends Component {
     }
 
     onShowPassword() {
-        this.setState({"touched":{hiddenPass: !this.state.touched.hiddenPass}})
+        this.setState({"touched": {hiddenPass: !this.state.touched.hiddenPass}})
     }
 
     onDateChangeHandler(date) {
-        console.log("===========test=========" + new Date(date).toUTCString())
+        console.log("===========test=========")
         const dateString = new Date(date).toUTCString()
         this.setState({
             ['birthday']: date
@@ -162,25 +176,39 @@ class UserEditPage extends Component {
             return;
         }
 
-        const { touched, ...otherProps } = this.state;
+        const {touched, ...otherProps} = this.state;
         const loggedInUserId = this.props.loggedInUserData.id;
         this.props.updateUser(loggedInUserId, otherProps);
     }
 
     canBeSubmitted() {
-        const { username, email, firstName, lastName, address, city, picURl, backgroundImageUrl,password,nickname,maritalStatus,gender,birthday } = this.state;
-        const errors = this.validate(username, email, firstName, lastName, address, city, picURl, backgroundImageUrl,password,nickname,maritalStatus,gender,birthday)
+        const {
+            username,
+            email,
+            firstName,
+            lastName,
+            address,
+            city,
+            picURl,
+            backgroundImageUrl,
+            password,
+            nickname,
+            maritalStatus,
+            gender,
+            birthday,
+        } = this.state;
+        const errors = this.validate(username, email, firstName, lastName, address, city, picURl, backgroundImageUrl, password, nickname, maritalStatus, gender, birthday)
         const isDisabled = Object.keys(errors).some(x => errors[x])
         return !isDisabled;
     }
 
     handleBlur = (field) => (event) => {
         this.setState({
-            touched: { ...this.state.touched, [field]: true }
+            touched: {...this.state.touched, [field]: true}
         });
     }
 
-    validate = (username, email, firstName, lastName, address, city, picURl, backgroundImageUrl,password,nickname,maritalStatus,gender,birthday) => {
+    validate = (username, email, firstName, lastName, address, city, picURl, backgroundImageUrl, password, nickname, maritalStatus, gender, birthday) => {
         const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
         const firstLastNameRegex = /^[A-Z]([a-zA-Z]+)?$/;
         const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[.,!@#$%^&+=])(?=\S+$).{8,30}$/;
@@ -203,14 +231,28 @@ class UserEditPage extends Component {
             backgroundImageUrl: backgroundImageUrl.length === 0,
             password: password.length < 8 || password.length > 30 || !testPassword,
             nickname: nickname.length < 4 || nickname.length > 16 || !testNickname,
-            maritalStatus: maritalStatus.length===0,
+            maritalStatus: maritalStatus.length === 0,
             gender: gender.length === 0,
             birthday: testBirthday,
         }
     }
 
     render() {
-        const { username, email, firstName, lastName, address, city, picURl, backgroundImageUrl,password,nickname,maritalStatus,gender,birthday } = this.state;
+        const {
+            username,
+            email,
+            firstName,
+            lastName,
+            address,
+            city,
+            picURl,
+            backgroundImageUrl,
+            password,
+            nickname,
+            maritalStatus,
+            gender,
+            birthday
+        } = this.state;
 
         const loggedInUserName = userService.getUsername();
         const loggedInRole = userService.getRole();
@@ -221,7 +263,7 @@ class UserEditPage extends Component {
         if (loggedInUserName !== username && (loggedInRole !== "ROOT")) {
             showPicsButtons = false;
         }
-        const errors = this.validate(username, email, firstName, lastName, address, city, picURl, backgroundImageUrl,password,nickname,maritalStatus,gender,birthday);
+        const errors = this.validate(username, email, firstName, lastName, address, city, picURl, backgroundImageUrl, password, nickname, maritalStatus, gender, birthday);
         const isEnabled = !Object.keys(errors).some(x => errors[x])
 
         const shouldMarkError = (field) => {
@@ -235,31 +277,32 @@ class UserEditPage extends Component {
                 <article className="main-article-shared-content">
                     <section className="form-content-section">
                         <div className="container mb-4">
-                            <h1 className="text-center font-weight-bold mt-4" style={{ 'margin': '1rem auto' }}>Edit Account</h1>
+                            <h1 className="text-center font-weight-bold mt-4" style={{'margin': '1rem auto'}}>Edit
+                                Account</h1>
 
                             <div className="hr-styles"></div>
 
-                            <form className="Register-form-container  " onSubmit={this.onSubmitHandler} >
+                            <form className="Register-form-container  " onSubmit={this.onSubmitHandler}>
 
                                 <div className="section-container w-100 mx-auto text-center">
                                     <section className="left-section">
-                            {/*            { <div className="form-group">*/}
-                            {/*    <label htmlFor="username" className="font-weight-bold" >Username</label>*/}
-                            {/*    <input*/}
-                            {/*        type="text"*/}
-                            {/*        className={"form-control " + (shouldMarkError('username') ? "error" : "")}*/}
-                            {/*        id="username"*/}
-                            {/*        name="username"*/}
-                            {/*        value={this.state.username}*/}
-                            {/*        onChange={this.onChangeHandler}*/}
-                            {/*        onBlur={this.handleBlur('username')}*/}
-                            {/*        aria-describedby="usernameHelp"*/}
-                            {/*        placeholder="Enter username"*/}
-                            {/*    />*/}
-                            {/*    {shouldMarkError('username') && <small id="usernameHelp" className="form-text alert alert-danger"> {(!this.state.username ? 'Username is required!' : 'Username should be at least 4 and maximum 16 characters long!')}</small>}*/}
-                            {/*</div> }*/}
+                                        {/*            { <div className="form-group">*/}
+                                        {/*    <label htmlFor="username" className="font-weight-bold" >Username</label>*/}
+                                        {/*    <input*/}
+                                        {/*        type="text"*/}
+                                        {/*        className={"form-control " + (shouldMarkError('username') ? "error" : "")}*/}
+                                        {/*        id="username"*/}
+                                        {/*        name="username"*/}
+                                        {/*        value={this.state.username}*/}
+                                        {/*        onChange={this.onChangeHandler}*/}
+                                        {/*        onBlur={this.handleBlur('username')}*/}
+                                        {/*        aria-describedby="usernameHelp"*/}
+                                        {/*        placeholder="Enter username"*/}
+                                        {/*    />*/}
+                                        {/*    {shouldMarkError('username') && <small id="usernameHelp" className="form-text alert alert-danger"> {(!this.state.username ? 'Username is required!' : 'Username should be at least 4 and maximum 16 characters long!')}</small>}*/}
+                                        {/*</div> }*/}
                                         <div className="form-group">
-                                            <label htmlFor="nickname" >Nickname</label>
+                                            <label htmlFor="nickname">Nickname</label>
                                             <input
                                                 type="text"
                                                 className={"form-control " + (shouldMarkError('nickname') ? "error" : "")}
@@ -271,7 +314,8 @@ class UserEditPage extends Component {
                                                 aria-describedby="nicknameHelp"
                                                 placeholder="Enter nickname"
                                             />
-                                            {shouldMarkError('nickname') && <small id="nicknameHelp" className="form-text alert alert-danger"> {(!this.state.nickname ? 'nickname is required!' : 'nickname should be at least 4 and maximum 16 characters or number long!')}</small>}
+                                            {shouldMarkError('nickname') && <small id="nicknameHelp"
+                                                                                   className="form-text alert alert-danger"> {(!this.state.nickname ? 'nickname is required!' : 'nickname should be at least 4 and maximum 16 characters or number long!')}</small>}
                                         </div>
 
                                         <div className="form-group">
@@ -289,11 +333,13 @@ class UserEditPage extends Component {
                                                 format='MM-dd-y'
                                                 placeholder='Select Date'
                                                 aria-describedby="birthdayHelp"/>
-                                            {shouldMarkError('birthday') && <small id="birthdayHelp" className="form-text alert alert-danger">birthday is required!</small>}
+                                            {shouldMarkError('birthday') &&
+                                            <small id="birthdayHelp" className="form-text alert alert-danger">birthday
+                                                is required!</small>}
                                         </div>
 
                                         <div className="form-group">
-                                            <label htmlFor="firstName" className="font-weight-bold" >First Name</label>
+                                            <label htmlFor="firstName" className="font-weight-bold">First Name</label>
                                             <input
                                                 type="text"
                                                 className={"form-control " + (shouldMarkError('firstName') ? "error" : "")}
@@ -305,7 +351,8 @@ class UserEditPage extends Component {
                                                 aria-describedby="firstNameHelp"
                                                 placeholder="Enter first name"
                                             />
-                                            {shouldMarkError('firstName') && <small id="firstNameHelp" className="form-text alert alert-danger">{(!this.state.firstName ? 'First Name is required!' : 'First Name must start with a capital letter and contain only letters!')}</small>}
+                                            {shouldMarkError('firstName') && <small id="firstNameHelp"
+                                                                                    className="form-text alert alert-danger">{(!this.state.firstName ? 'First Name is required!' : 'First Name must start with a capital letter and contain only letters!')}</small>}
                                         </div>
 
                                         <div className="form-group">
@@ -323,11 +370,13 @@ class UserEditPage extends Component {
                                                 <option value="female">Female</option>
 
                                             </select>
-                                            {shouldMarkError('gender') && <small id="genderHelp" className="form-text alert alert-danger">gender is required!</small>}
+                                            {shouldMarkError('gender') &&
+                                            <small id="genderHelp" className="form-text alert alert-danger">gender is
+                                                required!</small>}
                                         </div>
 
                                         <div className="form-group">
-                                            <label htmlFor="address" className="font-weight-bold" >Address</label>
+                                            <label htmlFor="address" className="font-weight-bold">Address</label>
                                             <input
                                                 type="text"
                                                 className={"form-control " + (shouldMarkError('address') ? "error" : "")}
@@ -339,11 +388,13 @@ class UserEditPage extends Component {
                                                 aria-describedby="addressHelp"
                                                 placeholder="Enter address"
                                             />
-                                            {shouldMarkError('address') && <small id="addressHelp" className="form-text alert alert-danger">{(!this.state.address ? 'Address is required!' : '')}</small>}
+                                            {shouldMarkError('address') && <small id="addressHelp"
+                                                                                  className="form-text alert alert-danger">{(!this.state.address ? 'Address is required!' : '')}</small>}
                                         </div>
 
                                         {showPicsButtons && <div className="form-group">
-                                            <label htmlFor="picURl" className="font-weight-bold" >Profile image url</label>
+                                            <label htmlFor="picURl" className="font-weight-bold">Profile image
+                                                url</label>
                                             <input
                                                 type="text"
                                                 className={"form-control " + (shouldMarkError('picURl') ? "error" : "")}
@@ -355,32 +406,34 @@ class UserEditPage extends Component {
                                                 aria-describedby="picURlHelp"
                                                 placeholder="Enter profile image url"
                                             />
-                                            {shouldMarkError('picURl') && <small id="picURl" className="form-text alert alert-danger">{(!this.state.picURl ? 'Profile Image Url is required!' : '')}</small>}
+                                            {shouldMarkError('picURl') && <small id="picURl"
+                                                                                 className="form-text alert alert-danger">{(!this.state.picURl ? 'Profile Image Url is required!' : '')}</small>}
                                         </div>}
 
                                     </section>
 
                                     <section className="right-section">
-                                        { <div className="form-group">
-                                <label htmlFor="email" className="font-weight-bold">Email Address</label>
-                                <input
-                                    type="email"
-                                    className={"form-control " + (shouldMarkError('email') ? "error" : "")}
-                                    id="email"
-                                    name="email"
-                                    value={this.state.email}
-                                    onChange={this.onChangeHandler}
-                                    onBlur={this.handleBlur('email')}
-                                    aria-describedby="emailHelp"
-                                    placeholder="Enter email"
+                                        {<div className="form-group">
+                                            <label htmlFor="email" className="font-weight-bold">Email Address</label>
+                                            <input
+                                                type="email"
+                                                className={"form-control " + (shouldMarkError('email') ? "error" : "")}
+                                                id="email"
+                                                name="email"
+                                                value={this.state.email}
+                                                onChange={this.onChangeHandler}
+                                                onBlur={this.handleBlur('email')}
+                                                aria-describedby="emailHelp"
+                                                placeholder="Enter email"
 
-                                />
-                                {shouldMarkError('email') && <small id="emailHelp" className="form-text alert alert-danger">{(!this.state.email ? 'Email is required!' : 'Invalid e-mail address!')}</small>}
-                            </div> }
+                                            />
+                                            {shouldMarkError('email') && <small id="emailHelp"
+                                                                                className="form-text alert alert-danger">{(!this.state.email ? 'Email is required!' : 'Invalid e-mail address!')}</small>}
+                                        </div>}
                                         <div className="form-group">
-                                            <label htmlFor="password" >Password</label>
+                                            <label htmlFor="password">Password</label>
                                             <Input
-                                                type={this.state.touched.hiddenPass ? "text":"password"}
+                                                type={this.state.touched.hiddenPass ? "text" : "password"}
                                                 className={"form-control " + (shouldMarkError('password') ? "error" : "")}
                                                 id="password"
                                                 name="password"
@@ -394,11 +447,13 @@ class UserEditPage extends Component {
                                                         <IconButton
                                                             aria-label="toggle password visibility"
                                                             onClick={this.onShowPassword}>
-                                                            {this.state.touched.hiddenPass ? <VisibilityOff />:<Visibility />}
+                                                            {this.state.touched.hiddenPass ? <VisibilityOff/> :
+                                                                <Visibility/>}
                                                         </IconButton>
                                                     </InputAdornment>}
                                             />
-                                            {shouldMarkError('password') && <small id="passwordHelp" className="form-text alert alert-danger">{(!this.state.password ? 'Password is required!' : 'Password should be at least 8 and maximum 30 characters long, and should contain number, upper case and lower case alphabet, special character!')}</small>}
+                                            {shouldMarkError('password') && <small id="passwordHelp"
+                                                                                   className="form-text alert alert-danger">{(!this.state.password ? 'Password is required!' : 'Password should be at least 8 and maximum 30 characters long, and should contain number, upper case and lower case alphabet, special character!')}</small>}
                                         </div>
 
                                         <div className="form-group">
@@ -414,7 +469,8 @@ class UserEditPage extends Component {
                                                 aria-describedby="lastNameHelp"
                                                 placeholder="Enter last name"
                                             />
-                                            {shouldMarkError('lastName') && <small id="lastNameHelp" className="form-text alert alert-danger">{(!this.state.lastName ? 'Last Name is required!' : 'Last Name must start with a capital letter and contain only letters!')}</small>}
+                                            {shouldMarkError('lastName') && <small id="lastNameHelp"
+                                                                                   className="form-text alert alert-danger">{(!this.state.lastName ? 'Last Name is required!' : 'Last Name must start with a capital letter and contain only letters!')}</small>}
                                         </div>
 
                                         <div className="form-group">
@@ -430,7 +486,8 @@ class UserEditPage extends Component {
                                                 aria-describedby="cityHelp"
                                                 placeholder="Enter city"
                                             />
-                                            {shouldMarkError('city') && <small id="cityHelp" className="form-text alert alert-danger">{(!this.state.city ? 'City is required!' : '')}</small>}
+                                            {shouldMarkError('city') && <small id="cityHelp"
+                                                                               className="form-text alert alert-danger">{(!this.state.city ? 'City is required!' : '')}</small>}
                                         </div>
 
                                         <div className="form-group">
@@ -448,11 +505,14 @@ class UserEditPage extends Component {
                                                 <option value="married">Married</option>
 
                                             </select>
-                                            {shouldMarkError('maritalStatus') && <small id="maritalStatusHelp" className="form-text alert alert-danger">marital status is required!</small>}
+                                            {shouldMarkError('maritalStatus') &&
+                                            <small id="maritalStatusHelp" className="form-text alert alert-danger">marital
+                                                status is required!</small>}
                                         </div>
 
                                         {showPicsButtons && <div className="form-group">
-                                            <label htmlFor="backgroundImageUrl" className="font-weight-bold" >Cover image url</label>
+                                            <label htmlFor="backgroundImageUrl" className="font-weight-bold">Cover image
+                                                url</label>
                                             <input
                                                 type="text"
                                                 className={"form-control " + (shouldMarkError('backgroundImageUrl') ? "error" : "")}
@@ -464,16 +524,22 @@ class UserEditPage extends Component {
                                                 aria-describedby="backgroundImageUrlHelp"
                                                 placeholder="Enter cover image url"
                                             />
-                                            {shouldMarkError('backgroundImageUrl') && <small id="backgroundImageUrlHelp" className="form-text alert alert-danger">{(!this.state.backgroundImageUrl ? 'Cover Image Url is required!' : '')}</small>}
+                                            {shouldMarkError('backgroundImageUrl') && <small id="backgroundImageUrlHelp"
+                                                                                             className="form-text alert alert-danger">{(!this.state.backgroundImageUrl ? 'Cover Image Url is required!' : '')}</small>}
                                         </div>}
                                     </section>
                                 </div>
 
                                 <div className="hr-styles"></div>
                                 <div className="text-center">
-                                    <button disabled={!isEnabled} type="submit" className="btn App-button-primary btn-lg m-3">Edit</button>
-                                    <NavLink className="btn App-button-primary btn-lg m-3" to={`/home/profile/${this.props.id}`} role="button">Cancel</NavLink>
-                                    {(isAdmin || isRoot) && <NavLink className="btn App-button-primary btn-lg m-3" to={`/home/users/all/${userService.getUserId()}`} role="button">All Users</NavLink>}
+                                    <button disabled={!isEnabled} type="submit"
+                                            className="btn App-button-primary btn-lg m-3">Edit
+                                    </button>
+                                    <NavLink className="btn App-button-primary btn-lg m-3"
+                                             to={`/home/profile/${this.props.id}`} role="button">Cancel</NavLink>
+                                    {(isAdmin || isRoot) && <NavLink className="btn App-button-primary btn-lg m-3"
+                                                                     to={`/home/users/all/${userService.getUserId()}`}
+                                                                     role="button">All Users</NavLink>}
                                 </div>
                             </form>
                         </div>
@@ -497,10 +563,18 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateUser: (loggedInUserId, userData) => { dispatch(updateUserAction(loggedInUserId, userData)) },
-        changeTimeLineUser: (userId) => { dispatch(changeCurrentTimeLineUserAction(userId)) },
-        changeAllFriends: (userId) => { dispatch(changeAllFriendsAction(userId)) },
-        changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },
+        updateUser: (loggedInUserId, userData) => {
+            dispatch(updateUserAction(loggedInUserId, userData))
+        },
+        changeTimeLineUser: (userId) => {
+            dispatch(changeCurrentTimeLineUserAction(userId))
+        },
+        changeAllFriends: (userId) => {
+            dispatch(changeAllFriendsAction(userId))
+        },
+        changeAllPictures: (userId) => {
+            dispatch(changeAllPicturesAction(userId))
+        },
     }
 }
 

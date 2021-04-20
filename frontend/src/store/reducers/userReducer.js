@@ -1,21 +1,60 @@
 import {
-    FETCH_LOGGEDIN_USERDATA_BEGIN, FETCH_LOGGEDIN_USERDATA_SUCCESS, FETCH_LOGGEDIN_USERDATA_ERROR, UPDATE_LOGGEDIN_USERDATA,
-    FETCH_TIMELINE_USERDATA_BEGIN, FETCH_TIMELINE_USERDATA_SUCCESS, FETCH_TIMELINE_USERDATA_ERROR, UPDATE_TIMELINE_USERDATA,
-    FETCH_ALLCHATFRIENDS_BEGIN, FETCH_ALLCHATFRIENDS_SUCCESS, FETCH_ALLCHATFRIENDS_ERROR, EDIT_USERSTATUS,
-    FETCH_ALLFRIENDS_BEGIN, FETCH_ALLFRIENDS_SUCCESS, FETCH_ALLFRIENDS_ERROR,
-    UPDATE_USER_SUCCESS, UPDATE_USER_BEGIN, UPDATE_USER_ERROR,
-    FETCH_ALLUSERS_SUCCESS, FETCH_ALLUSERS_BEGIN, FETCH_ALLUSERS_ERROR,
-    PROMOTE_USER_SUCCESS, PROMOTE_USER_BEGIN, PROMOTE_USER_ERROR,
-    DEMOTE_USER_SUCCESS, DEMOTE_USER_BEGIN, DEMOTE_USER_ERROR, CHANGE_USERROLE,
-    CHANGE_TIMELINE_USERDATA_SUCCESS, CHANGE_TIMELINE_USERDATA_BEGIN, CHANGE_TIMELINE_USERDATA_ERROR,
-    CHANGE_ALLFRIENDS_SUCCESS, CHANGE_ALLFRIENDS_BEGIN, CHANGE_ALLFRIENDS_ERROR, UPDATE_ALL_FRIENDS,
-    REMOVE_FRIEND_SUCCESS, REMOVE_FRIEND_BEGIN, REMOVE_FRIEND_ERROR,
-    DELETE_USER_SUCCESS, DELETE_USER_BEGIN, DELETE_USER_ERROR,
-    FIND_FRIENDS_SUCCESS, FIND_FRIENDS_BEGIN, FIND_FRIENDS_ERROR,
-    ADD_FRIEND_SUCCESS, ADD_FRIEND_BEGIN, ADD_FRIEND_ERROR,
-    CANCEL_REQUEST_SUCCESS, CANCEL_REQUEST_BEGIN, CANCEL_REQUEST_ERROR,
-    CONFIRM_REQUEST_SUCCESS, CONFIRM_REQUEST_BEGIN, CONFIRM_REQUEST_ERROR,
-    SEARCH_RESULTS_SUCCESS, SEARCH_RESULTS_BEGIN, SEARCH_RESULTS_ERROR,
+    FETCH_LOGGEDIN_USERDATA_BEGIN,
+    FETCH_LOGGEDIN_USERDATA_SUCCESS,
+    FETCH_LOGGEDIN_USERDATA_ERROR,
+    UPDATE_LOGGEDIN_USERDATA,
+    FETCH_TIMELINE_USERDATA_BEGIN,
+    FETCH_TIMELINE_USERDATA_SUCCESS,
+    FETCH_TIMELINE_USERDATA_ERROR,
+    UPDATE_TIMELINE_USERDATA,
+    FETCH_ALLCHATFRIENDS_BEGIN,
+    FETCH_ALLCHATFRIENDS_SUCCESS,
+    FETCH_ALLCHATFRIENDS_ERROR,
+    EDIT_USERSTATUS,
+    FETCH_ALLFRIENDS_BEGIN,
+    FETCH_ALLFRIENDS_SUCCESS,
+    FETCH_ALLFRIENDS_ERROR,
+    UPDATE_USER_SUCCESS,
+    UPDATE_USER_BEGIN,
+    UPDATE_USER_ERROR,
+    FETCH_ALLUSERS_SUCCESS,
+    FETCH_ALLUSERS_BEGIN,
+    FETCH_ALLUSERS_ERROR,
+    PROMOTE_USER_SUCCESS,
+    PROMOTE_USER_BEGIN,
+    PROMOTE_USER_ERROR,
+    DEMOTE_USER_SUCCESS,
+    DEMOTE_USER_BEGIN,
+    DEMOTE_USER_ERROR,
+    CHANGE_USERROLE,
+    CHANGE_TIMELINE_USERDATA_SUCCESS,
+    CHANGE_TIMELINE_USERDATA_BEGIN,
+    CHANGE_TIMELINE_USERDATA_ERROR,
+    CHANGE_ALLFRIENDS_SUCCESS,
+    CHANGE_ALLFRIENDS_BEGIN,
+    CHANGE_ALLFRIENDS_ERROR,
+    UPDATE_ALL_FRIENDS,
+    REMOVE_FRIEND_SUCCESS,
+    REMOVE_FRIEND_BEGIN,
+    REMOVE_FRIEND_ERROR,
+    DELETE_USER_SUCCESS,
+    DELETE_USER_BEGIN,
+    DELETE_USER_ERROR,
+    FIND_FRIENDS_SUCCESS,
+    FIND_FRIENDS_BEGIN,
+    FIND_FRIENDS_ERROR,
+    ADD_FRIEND_SUCCESS,
+    ADD_FRIEND_BEGIN,
+    ADD_FRIEND_ERROR,
+    CANCEL_REQUEST_SUCCESS,
+    CANCEL_REQUEST_BEGIN,
+    CANCEL_REQUEST_ERROR,
+    CONFIRM_REQUEST_SUCCESS,
+    CONFIRM_REQUEST_BEGIN,
+    CONFIRM_REQUEST_ERROR,
+    SEARCH_RESULTS_SUCCESS,
+    SEARCH_RESULTS_BEGIN,
+    SEARCH_RESULTS_ERROR,
 } from '../actions/actionTypes';
 
 import placeholder_user_image from '../../assets/images/placeholder.png';
@@ -41,11 +80,13 @@ const initialStateLoggedInUserData = {
     status: '',
     path: '',
     loading: false,
-    password:'',
-    nickname:'',
-    maritalStatus:'',
-    gender:'',
-    birthday:'',
+    password: '',
+    nickname: '',
+    maritalStatus: '',
+    gender: '',
+    birthday: '',
+    follower: [],
+    followed: [],
 }
 
 const loggedInUserDataReducer = (state = initialStateLoggedInUserData, action) => {
@@ -54,7 +95,7 @@ const loggedInUserDataReducer = (state = initialStateLoggedInUserData, action) =
             return Object.assign({},
                 state,
                 initialStateLoggedInUserData,
-                { loading: true }
+                {loading: true}
             )
         case FETCH_LOGGEDIN_USERDATA_SUCCESS:
             return Object.assign({},
@@ -106,9 +147,9 @@ const initialStateTimeLineUserData = {
     firstName: '',
     lastName: '',
     address: '',
-    password:'',
-    nickname:'',
-    maritalStatus:'',
+    password: '',
+    nickname: '',
+    maritalStatus: '',
     city: '',
     search: '',
     category: '',
@@ -121,8 +162,10 @@ const initialStateTimeLineUserData = {
     status: '',
     path: '',
     loading: false,
-    gender:'',
-    birthday:'',
+    gender: '',
+    birthday: '',
+    follower: [],
+    followed: [],
 }
 
 const timeLineUserDataReducer = (state = initialStateTimeLineUserData, action) => {
@@ -131,9 +174,10 @@ const timeLineUserDataReducer = (state = initialStateTimeLineUserData, action) =
             return Object.assign({},
                 state,
                 initialStateTimeLineUserData,
-                { loading: true }
+                {loading: true}
             )
         case FETCH_TIMELINE_USERDATA_SUCCESS:
+            console.log('fetch timeline user data reducer')
             return Object.assign({},
                 state,
                 action.payload,
@@ -226,7 +270,7 @@ const fetchAllChatFriendsReducer = (state = initialStateAllChatFriends, action) 
 }
 
 const updateUserStatus = (state, data) => {
-    const { id, online } = data;
+    const {id, online} = data;
 
     const newFriendsChatArr = state.friendsChatArr.map((friend) => {
         if (friend.id !== id) {
@@ -360,7 +404,7 @@ const removeUser = (state, deletedUserId) => {
 }
 
 const updateUserRole = (state, data) => {
-    const { id, role } = data;
+    const {id, role} = data;
 
     const newUserArr = state.userArr.map((user) => {
         if (user.id !== id) {
@@ -535,11 +579,13 @@ const initialStateChangeTimeLineUserData = {
     status: '',
     path: '',
     loading: false,
-    password:'',
-    nickname:'',
-    maritalStatus:'',
-    gender:'',
-    birthday:'',
+    password: '',
+    nickname: '',
+    maritalStatus: '',
+    gender: '',
+    birthday: '',
+    follower: [],
+    followed: [],
 }
 
 const changeTimeLineUserDataReducer = (state = initialStateChangeTimeLineUserData, action) => {
@@ -548,7 +594,7 @@ const changeTimeLineUserDataReducer = (state = initialStateChangeTimeLineUserDat
             return Object.assign({},
                 state,
                 initialStateTimeLineUserData,
-                { loading: true }
+                {loading: true}
             )
         case CHANGE_TIMELINE_USERDATA_SUCCESS:
             return Object.assign({},

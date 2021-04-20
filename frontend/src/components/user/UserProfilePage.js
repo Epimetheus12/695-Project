@@ -18,12 +18,11 @@ class UserProfilePage extends Component {
     }
 
     componentDidMount() {
-        console.log("start did mount")
         const currentTimeLineUserId = this.props.match.params.id
         this.setState({currentTimeLineUserId});
+        console.log('start user profile')
 
         if (currentTimeLineUserId !== this.props.timeLineUser.id) {
-            console.log("wojinlaile")
             this.initialDataLoad(currentTimeLineUserId);
         }
     }
@@ -35,8 +34,10 @@ class UserProfilePage extends Component {
     }
 
     initialDataLoad = (currentTimeLineUserId) => {
+        console.log('initial data load start')
         this.setState({ currentTimeLineUserId },
             () => {
+                console.log('start change time line user')
                 this.props.changeTimeLineUser(currentTimeLineUserId);
                 this.props.changeAllPictures(currentTimeLineUserId);
                 this.props.changeAllFriends(currentTimeLineUserId);

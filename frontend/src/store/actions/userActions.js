@@ -154,6 +154,7 @@ const updateTimeLineUserDataAction = (userData) => {
 const fetchTimeLineUserAction = (userId) => {
     return (dispatch) => {
         dispatch(fetchTimeLineUserBegin())
+        console.log('fetch timeline user action')
         return requester.get(`/api/users/details/${userId}`, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
