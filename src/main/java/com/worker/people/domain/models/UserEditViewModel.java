@@ -9,6 +9,12 @@ public class UserEditViewModel {
     private String address;
     private String city;
     private String PicURL;
+    private String[] followed;
+    private String[] follower;
+    private String maritalStatus;
+    private String birthday;
+    private String gender;
+    private String nickname;
 
     public UserEditViewModel() {
     }
@@ -75,5 +81,53 @@ public class UserEditViewModel {
 
     public void setPicURL(String picURL) {
         PicURL = picURL;
+    }
+
+    public String[] getFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(String[] followed) {
+        this.followed = followed;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public String[] getFollower() {
+        return follower;
+    }
+
+    public void setFollower(String[] follower) {
+        this.follower = follower;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

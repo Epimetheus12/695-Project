@@ -1,6 +1,7 @@
 package com.worker.people.domain.models;
 
 import com.worker.people.domain.entities.Role;
+
 import java.util.Set;
 
 public class UserDetailsViewModel {
@@ -12,6 +13,12 @@ public class UserDetailsViewModel {
     private String address;
     private String city;
     private String picURl;
+    private String maritalStatus;
+    private String gender;
+    private String birthday;
+    private String[] followed;
+    private String[] follower;
+    private String nickname;
 
     private Set<Role> authorities;
 
@@ -74,7 +81,7 @@ public class UserDetailsViewModel {
         this.city = city;
     }
 
-    public String getPicURl( ) {
+    public String getPicURl() {
         return picURl;
     }
 
@@ -90,4 +97,51 @@ public class UserDetailsViewModel {
         this.authorities = authorities;
     }
 
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setFollower(String[] follower) {
+        this.follower = follower;
+    }
+
+    public String[] getFollower() {
+        return follower;
+    }
+
+    public void setFollowed(String[] followed) {
+        this.followed = followed;
+    }
+
+    public String[] getFollowed() {
+        return followed;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
 }
