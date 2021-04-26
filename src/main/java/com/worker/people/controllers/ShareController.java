@@ -1,14 +1,25 @@
 package com.worker.people.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.worker.people.domain.models.PostCreateModel;
+import com.worker.people.utils.CustomException;
+import com.worker.people.utils.responses.SuccessResponse;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.worker.people.domain.entities.Share;
 import com.worker.people.repositories.ShareRepository;
+import com.worker.people.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import static com.worker.people.utils.messages.ResponseMessage.*;
+import com.worker.people.repositories.PostRepository;
 
+import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +30,17 @@ public class ShareController {
     @Autowired
     private ShareRepository shareRepository;
 
+    private final PostService postService;
+    private final ModelMapper modelMapper;
+    private final ObjectMapper objectMapper;
+
     Logger LOG = LoggerFactory.getLogger(getClass());
+    @Autowired
+    public ShareController(ModelMapper modelMapper, ObjectMapper objectMapper,PostService postService) {
+        this.modelMapper = modelMapper;
+        this.objectMapper = objectMapper;
+        this.postService = postService;
+    }
 
     @RequestMapping(value="/share/{id}",method = RequestMethod.GET)
     public Share getShareById(@PathVariable("id") String shareId){
@@ -35,6 +56,16 @@ public class ShareController {
         shareRepository.save(share);
         return share;
     }
+
+//    @GetMapping(value="/all/{id}")
+//    public List<PostAllViewModel> getAllPosts(@PathVariable(value = "id") String timelineUserId){
+//        try{
+//
+//        }
+//        catch (Exception e){
+//
+//        }
+//    }
 
     /*
     @PutMapping(value = "/updateshare/{id}")
@@ -64,6 +95,17 @@ public class ShareController {
     public List<Share> getShareByUser(@PathVariable("id") String userId){
         //find shares by user id
         return shareRepository.findByAuthorId(userId);
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<Object> createPost(@RequestBody@Valid PostCreateModel postCreateModel, Authentication principal) throws Exception{
+        boolean post = this.postService.createPost(postCreateModel);
+        if (post) {
+            SuccessResponse successResponse = new SuccessResponse(LocalDateTime.now(), SUCCESSFUL_CREATE_POST_MESSAGE, " ", true);
+            return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);
+        }
+
+        throw new CustomException(SERVER_ERROR_MESSAGE);
     }
 
 }

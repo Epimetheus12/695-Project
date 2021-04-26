@@ -155,7 +155,7 @@ const fetchTimeLineUserAction = (userId) => {
     return (dispatch) => {
         dispatch(fetchTimeLineUserBegin())
         console.log('fetch timeline user action')
-        return requester.get(`/api/users/details/${userId}`, (response) => {
+        return requester.get(`/api/user/details/${userId}`, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(fetchTimeLineUserError(error, message, status, path));

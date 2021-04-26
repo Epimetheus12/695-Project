@@ -8,7 +8,7 @@ import {
     cancelRequestReducer, confirmRequestReducer, searchResultsReducer,
 } from './userReducer';
 // import { fetchAllMessagesReducer, fetchAllUnreadMessagesReducer, triggerMessageLoadReducer } from './messagesReducer';
-// import { createPostReducer, fetchAllPostsReducer, removePostReducer, addLikePostReducer } from './postReducer';
+import { createPostReducer, fetchAllPostsReducer, removePostReducer, addLikePostReducer } from './postReducer';
 // import { createCommentReducer, removeCommentReducer, addLikeCommentReducer } from './commentReducer';
 // import { fetchAllLogsReducer, findLogsByUserNameReducer, clearLogsByUserNameReducer, clearAllLogsReducer } from './logsReducer';
 
@@ -28,11 +28,11 @@ export default {
     // fetchAllMessages: fetchAllMessagesReducer,
     // fetchAllUnreadMessages: fetchAllUnreadMessagesReducer,
     fetchAllFriends: fetchAllFriendsReducer,
-    // createPost: createPostReducer,
-    // fetchAllPosts: fetchAllPostsReducer,
-    // removePost: removePostReducer,
+    createPost: createPostReducer,
+    fetchAllPosts: fetchAllPostsReducer,
+    removePost: removePostReducer,
     // removeComment: removeCommentReducer,
-    // addLikePost: addLikePostReducer,
+    addLikePost: addLikePostReducer,
     // addLikeComment: addLikeCommentReducer,
     // createComment: createCommentReducer,
     promoteUserData: promoteUserReducer,
