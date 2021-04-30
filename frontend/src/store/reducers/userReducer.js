@@ -18,8 +18,13 @@ import {
     SEARCH_RESULTS_SUCCESS, SEARCH_RESULTS_BEGIN, SEARCH_RESULTS_ERROR,
 } from '../actions/actionTypes';
 
+<<<<<<< HEAD
 import placeholder_user_image from '../../static/images/placeholder.png';
 import default_background_image from '../../static/images/default-background-image.jpg';
+=======
+import placeholder_user_image from '';
+import default_background_image from '';
+>>>>>>> origin/main
 
 // loggedInUserDataReducer
 const initialStateLoggedInUserData = {
@@ -104,8 +109,13 @@ const initialStateTimeLineUserData = {
     city: '',
     search: '',
     category: '',
+<<<<<<< HEAD
     profilePicURL: placeholder_user_image,
     backgroundPicURL: default_background_image,
+=======
+    profilePicUrl: placeholder_user_image,
+    backgroundImageUrl: default_background_image,
+>>>>>>> origin/main
     authority: '',
     hasError: false,
     error: '',
@@ -516,8 +526,13 @@ const initialStateChangeTimeLineUserData = {
     city: '',
     search: '',
     category: '',
+<<<<<<< HEAD
     profilePicURL: placeholder_user_image,
     backgroundImageURL: default_background_image,
+=======
+    profilePicUrl: placeholder_user_image,
+    backgroundImageUrl: default_background_image,
+>>>>>>> origin/main
     authority: '',
     hasError: false,
     error: '',
@@ -880,7 +895,11 @@ const initialStateAddFriend = {
     loading: false,
 }
 
+<<<<<<< HEAD
 const addFriendReducer = (state = initialStateAddFriend, action) => {
+=======
+const addfriendReducer = (state = initialStateAddFriend, action) => {
+>>>>>>> origin/main
     switch (action.type) {
         case ADD_FRIEND_BEGIN:
             return Object.assign({}, state, {
@@ -1207,11 +1226,16 @@ const searchResultsRemoveFriend = (state, friendToRemoveId) => {
 }
 
 export {
+<<<<<<< HEAD
 /*    fetchAllChatFriendsReducer,*/
+=======
+    fetchAllChatFriendsReducer,
+>>>>>>> origin/main
     loggedInUserDataReducer,
     timeLineUserDataReducer,
     fetchAllFriendsReducer,
     updateUserReducer,
+<<<<<<< HEAD
 /*    fetchAllUsersReducer,*/
 /*    promoteUserReducer,
     demoteUserReducer,*/
@@ -1221,6 +1245,17 @@ export {
 /*    deleteUserReducer,*/
     findFriendsReducer,
     addFriendReducer,
+=======
+    fetchAllUsersReducer,
+    promoteUserReducer,
+    demoteUserReducer,
+    changeTimeLineUserDataReducer,
+    changeAllFriendsReducer,
+    removeFriendReducer,
+    deleteUserReducer,
+    findFriendsReducer,
+    addfriendReducer,
+>>>>>>> origin/main
     cancelRequestReducer,
     confirmRequestReducer,
     searchResultsReducer,
