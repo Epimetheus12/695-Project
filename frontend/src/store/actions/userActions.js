@@ -103,11 +103,8 @@ const updateLoggedInUserDataAction = (userData) => {
 const fetchLoggedInUserAction = (userId) => {
     return (dispatch) => {
         dispatch(fetchLoggedInUserBegin())
-<<<<<<< HEAD
         return requester.get(`/api/user/details/${userId}`, (response) => {
-=======
-        return requester.get(`/users/details/${userId}`, (response) => {
->>>>>>> origin/main
+
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(fetchLoggedInUserError(error, message, status, path));
@@ -158,11 +155,7 @@ const updateTimeLineUserDataAction = (userData) => {
 const fetchTimeLineUserAction = (userId) => {
     return (dispatch) => {
         dispatch(fetchTimeLineUserBegin())
-<<<<<<< HEAD
         return requester.get(`/api/user/details/${userId}`, (response) => {
-=======
-        return requester.get(`/users/details/${userId}`, (response) => {
->>>>>>> origin/main
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(fetchTimeLineUserError(error, message, status, path));
@@ -205,11 +198,7 @@ const changeCurrentTimeLineUserError = (error, message, status, path) => {
 const changeCurrentTimeLineUserAction = (userId) => {
     return (dispatch) => {
         dispatch(changeCurrentTimeLineUserBegin())
-<<<<<<< HEAD
         return requester.get(`/api/user/details/${userId}`, (response) => {
-=======
-        return requester.get(`/users/details/${userId}`, (response) => {
->>>>>>> origin/main
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(changeCurrentTimeLineUserError(error, message, status, path));
@@ -250,19 +239,13 @@ const fetchAllFriendsError = (error, message, status, path) => {
     }
 }
 
-<<<<<<< HEAD
+
 //TODO
 
 const fetchAllFriendsAction = (userId) => {
     return (dispatch) => {
         dispatch(fetchAllFriendsBegin())
         return requester.get(`/api/user/followed/${userId}`, (response) => {
-=======
-const fetchAllFriendsAction = (userId) => {
-    return (dispatch) => {
-        dispatch(fetchAllFriendsBegin())
-        return requester.get(`/relationship/friends/${userId}`, (response) => {
->>>>>>> origin/main
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(fetchAllFriendsError(error, message, status, path));
@@ -358,11 +341,8 @@ const updateUserAction = (loggedInUserId, otherProps) => {
 
     return (dispatch) => {
         dispatch(updateUserBegin())
-<<<<<<< HEAD
         return requester.put('/api/user/edit/' + loggedInUserId, { ...otherProps }, (response) => {
-=======
-        return requester.put('/users/update/' + loggedInUserId, { ...otherProps }, (response) => {
->>>>>>> origin/main
+
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(updateUserError(error, message, status, path));
@@ -818,11 +798,8 @@ const searchResultsError = (error, message, status, path) => {
 const searchResultsAction = (loggedInUserId, search) => {
     return (dispatch) => {
         dispatch(searchResultsBegin())
-<<<<<<< HEAD
         return requester.post('/api/user/search', {loggedInUserId, search}, (response) => {
-=======
-        return requester.post('/relationship/search', {loggedInUserId, search}, (response) => {
->>>>>>> origin/main
+
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(searchResultsError(error, message, status, path));
@@ -839,11 +816,8 @@ const searchResultsAction = (loggedInUserId, search) => {
 }
 
 export {
-<<<<<<< HEAD
     /*fetchAllChatFriendsAction,*/
-=======
     fetchAllChatFriendsAction,
->>>>>>> origin/main
     updateUserStatusAction,
     fetchLoggedInUserAction,
     updateLoggedInUserDataAction,
@@ -852,7 +826,6 @@ export {
     fetchAllFriendsAction,
     updateUserAction,
     fetchAllUsersAction,
-<<<<<<< HEAD
     /*promoteUserAction,
     demoteUserAction,*/
     /*updateUserRoleAction,*/
@@ -860,15 +833,6 @@ export {
     changeAllFriendsAction,
     removeFriendAction,
     /*deleteUserAction,*/
-=======
-    promoteUserAction,
-    demoteUserAction,
-    updateUserRoleAction,
-    changeCurrentTimeLineUserAction,
-    changeAllFriendsAction,
-    removeFriendAction,
-    deleteUserAction,
->>>>>>> origin/main
     findFriendsAction,
     addFriendAction,
     cancelRequestAction,
