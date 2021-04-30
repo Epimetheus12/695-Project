@@ -26,7 +26,8 @@ public class RegisterModel implements Serializable {
     private String lastName;
     private String address;
     private String city;
-    private String picURl;
+    private String profilePicURL;
+    private String backgroundPicURL;
 
     public RegisterModel( ) {
     }
@@ -96,8 +97,8 @@ public class RegisterModel implements Serializable {
         return city;
     }
 
-    public String getPicURl( ) {
-        return picURl;
+    public String getProfilePicURL( ) {
+        return profilePicURL;
     }
 
     public void setUsername(String username) {
@@ -148,7 +149,15 @@ public class RegisterModel implements Serializable {
         this.city = city;
     }
 
-    public void setPicURl(String picURl) {
-        this.picURl = picURl;
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
+    }
+
+    public String getBackgroundPicURL( ) {
+        return backgroundPicURL;
+    }
+
+    public void setBackgroundPicURL(String backgroundPicURL) {
+        this.backgroundPicURL = backgroundPicURL;
     }
 }

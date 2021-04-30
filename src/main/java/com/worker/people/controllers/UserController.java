@@ -1,13 +1,13 @@
 package com.worker.people.controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worker.people.domain.entities.User;
-import com.worker.people.domain.models.RegisterModel;
-import com.worker.people.domain.models.UserCreateViewModel;
-import com.worker.people.domain.models.UserServiceModel;
+import com.worker.people.domain.models.*;
 import com.worker.people.repositories.UserRepository;
 import com.worker.people.services.UserService;
+import com.worker.people.utils.CustomException;
 import com.worker.people.utils.responses.BadRequestException;
 import com.worker.people.utils.responses.SuccessResponse;
 import com.worker.people.validations.UserValidation;
@@ -21,7 +21,9 @@ import static com.worker.people.utils.messages.ResponseMessage.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -76,14 +78,15 @@ public class UserController {
         return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public User getUserById(@PathVariable String id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElseGet(User::new);
+    @RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
+    public ResponseEntity getUserById(@PathVariable String id) throws Exception {
+        UserDetailsViewModel user = this.userService.getById(id);
+        return new ResponseEntity<>(this.objectMapper.writeValueAsString(user), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<User> updateTutorial(@PathVariable("id") String id, @RequestBody User user){
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
+    public ResponseEntity updateTutorial(@RequestBody @Valid UserUpdateModel userUpdateModel,
+                                               @PathVariable(value = "id") String loggedInUserId) throws Exception{/*
         Optional<User> userData = userRepository.findById(id);
 
         if (userData.isPresent()){
@@ -104,7 +107,21 @@ public class UserController {
             return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }*/
+        if(!userValidation.isValid(userUpdateModel)){
+            throw new Exception(SERVER_ERROR_MESSAGE);
         }
+
+        UserServiceModel userServiceModel = this.modelMapper.map(userUpdateModel, UserServiceModel.class);
+        /*System.out.println(userServiceModel+ "======================"+loggedInUserId);*/
+        boolean result = this.userService.updateUser(userServiceModel, loggedInUserId);
+
+        if (result) {
+            SuccessResponse successResponse = successResponseBuilder(LocalDateTime.now(), SUCCESSFUL_USER_PROFILE_EDIT_MESSAGE, "", true);
+            return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);
+        }
+
+        throw new CustomException(SERVER_ERROR_MESSAGE);
     }
 
     @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
@@ -139,6 +156,19 @@ public class UserController {
 
     private SuccessResponse successResponseBuilder(LocalDateTime timestamp, String message, Object payload, boolean success) {
         return new SuccessResponse(timestamp, message, payload, success);
+    }
+
+    @RequestMapping(value = "/search", produces = "application/json", method = RequestMethod.POST)
+    public List<FriendsCandidatesViewModel> searchUsers(@RequestBody Map<String, Object> body) {
+        String loggedInUserId = (String) body.get("loggedInUserId");
+        String search = (String) body.get("search");
+
+        List<User> users = userRepository.findByUsernameOrFirstNameOrLastNameOrNicknameLike(search, search, search, search);
+
+        return users.stream().
+                filter(user -> !user.getId().equals(loggedInUserId)).
+                map(user -> this.modelMapper.map(user, FriendsCandidatesViewModel.class)).
+                collect(Collectors.toList());
     }
 
 }

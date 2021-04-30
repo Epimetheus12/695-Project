@@ -4,6 +4,7 @@ package com.worker.people.domain.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Document(collection = "shares")
@@ -15,7 +16,13 @@ public class Share {
     private String content;
     private String shareId;
     private int likeNum;
-    private Date time;
+    private LocalDateTime time;
+    private String[] commentId;
+//    private String[] imageID;
+
+    public Share() {
+
+    }
 
     public String getId() {
         return id;
@@ -41,7 +48,7 @@ public class Share {
         return likeNum;
     }
 
-    public Date getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
@@ -69,7 +76,7 @@ public class Share {
         this.likeNum = likeNum;
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 }

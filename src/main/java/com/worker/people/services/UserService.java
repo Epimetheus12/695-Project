@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    UserCreateViewModel createUser(UserServiceModel userRegisterBindingModel);
+    UserCreateViewModel createUser(UserServiceModel userRegisterModel);
 
-    boolean updateUser(UserServiceModel userUpdateBindingModel, String loggedInUserId) throws Exception;
+    boolean updateUser(UserServiceModel userUpdateModel, String loggedInUserId) throws Exception;
 
 //    UserServiceModel updateUserOnlineStatus(String userName, boolean changeToOnline) throws Exception;
 

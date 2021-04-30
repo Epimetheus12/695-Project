@@ -25,7 +25,8 @@ public class User implements UserDetails {
     private String address;
     private String city;
     private String[] hobby;
-    private String picURl;
+    private String profilePicURL;
+    private String backgroundPicURL;
     private Set<Role> authorities;
 
     private boolean isAccountNonExpired;
@@ -38,7 +39,7 @@ public class User implements UserDetails {
 
     }
 
-    public User(String id, String username, String email, String gender, String nickname, String password, String summary, String maritalStatus, String birthday, String[] follower, String[] followed, String firstName, String lastName, String address, String city, String[] hobby, String picURl, Set<Role> authorities) {
+    public User(String id, String username, String email, String gender, String nickname, String password, String summary, String maritalStatus, String birthday, String[] follower, String[] followed, String firstName, String lastName, String address, String city, String[] hobby, String profilePicURL, String backgroundPicURL, Set<Role> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -55,7 +56,8 @@ public class User implements UserDetails {
         this.address = address;
         this.city = city;
         this.hobby = hobby;
-        this.picURl = picURl;
+        this.profilePicURL = profilePicURL;
+        this.backgroundPicURL = backgroundPicURL;
         this.authorities = authorities;
 
 
@@ -145,6 +147,10 @@ public class User implements UserDetails {
         return hobby;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -205,12 +211,12 @@ public class User implements UserDetails {
         this.hobby = hobby;
     }
 
-    public String getPicURl( ) {
-        return picURl;
+    public String getProfilePicURL( ) {
+        return profilePicURL;
     }
 
-    public void setPicURl(String picURl) {
-        this.picURl = picURl;
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
     }
 
     public Set<Role> getAuthorities( ) {
@@ -232,6 +238,15 @@ public class User implements UserDetails {
     public void setCredentialsNonExpired(boolean credentialsNonExpired) {
         isCredentialsNonExpired = credentialsNonExpired;
     }
+
+    public String getBackgroundPicURL( ) {
+        return backgroundPicURL;
+    }
+
+    public void setBackgroundPicURL(String backgroundPicURL) {
+        this.backgroundPicURL = backgroundPicURL;
+    }
+
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;

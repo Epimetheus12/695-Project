@@ -11,7 +11,8 @@ public class UserDetailsViewModel {
     private String lastName;
     private String address;
     private String city;
-    private String picURl;
+    private String profilePicURL;
+    private String backgroundPicURL;
 
     private Set<Role> authorities;
 
@@ -74,12 +75,12 @@ public class UserDetailsViewModel {
         this.city = city;
     }
 
-    public String getPicURl( ) {
-        return picURl;
+    public String getProfilePicURL( ) {
+        return profilePicURL;
     }
 
-    public void setPicURl(String picURl) {
-        this.picURl = picURl;
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
     }
 
     public Set<Role> getAuthorities() {
@@ -90,4 +91,11 @@ public class UserDetailsViewModel {
         this.authorities = authorities;
     }
 
+    public String getBackgroundPicURL( ) {
+        return backgroundPicURL;
+    }
+
+    public void setBackgroundPicURL(String backgroundPicURL) {
+        this.backgroundPicURL = backgroundPicURL;
+    }
 }

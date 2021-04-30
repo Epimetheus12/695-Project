@@ -11,7 +11,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 //TODO import kl.socialnetwork.services.LoggerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -70,7 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .orElse(null)
                 .getAuthority();
         String id = user.getId();
-        String profilePicUrl = user.getPicURl();
+        String profilePicURL = user.getProfilePicURL();
         String firstName = user.getFirstName();
 
         String token = Jwts.builder()
@@ -78,7 +77,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setExpiration(new Date(System.currentTimeMillis() + 1200000000))
                 .claim("role", authority)
                 .claim("id", id)
-                .claim("profilePicUrl", profilePicUrl)
+                .claim("profilePicURL", profilePicURL)
                 .claim("firstName", firstName)
                 .signWith(SignatureAlgorithm.HS256, "Secret".getBytes())
                 .compact();

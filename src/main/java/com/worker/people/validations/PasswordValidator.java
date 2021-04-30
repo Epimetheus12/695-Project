@@ -34,7 +34,7 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
             return false;
         }
 
-        System.out.println("password postion 3");
+        /*System.out.println("password postion 3");*/
         return true;
     }
 

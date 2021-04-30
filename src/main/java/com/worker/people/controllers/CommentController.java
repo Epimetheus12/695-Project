@@ -47,7 +47,7 @@ public class CommentController {
         if (commentData.isPresent()){
             Comment _comment = commentData.get();
             _comment.setAuthor(comment.getAuthor());
-            _comment.setAuthorId(comment.getAuthorId());
+            _comment.setLoggedInUserId(comment.getLoggedInUserId());
             _comment.setContent(comment.getContent());
             _comment.setShareId(comment.getShareId());
             _comment.setLike_num(comment.getLike_num());

@@ -1,5 +1,6 @@
 package com.worker.people.servicesImpl;
 
+import com.mongodb.WriteConcern;
 import com.worker.people.domain.entities.Role;
 import com.worker.people.domain.entities.User;
 import com.worker.people.domain.models.UserCreateViewModel;
@@ -13,6 +14,7 @@ import com.worker.people.utils.CustomException;
 import com.worker.people.validations.UserValidation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.WriteResultChecking;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -78,7 +80,8 @@ public class UserServiceImpl implements UserService {
         }
 
         userEntity.setAuthorities(roles);
-
+        userEntity.setFollowed(new String[0]);
+        userEntity.setFollower(new String[0]);
         User user = this.userRepository.save(userEntity);
         if (user != null) {
             return this.modelMapper.map(userEntity, UserCreateViewModel.class);
@@ -107,11 +110,16 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        User userEntity = this.modelMapper.map(userServiceModel, User.class);
-        userEntity.setPassword(userToEdit.getPassword());
-        userEntity.setAuthorities(userToEdit.getAuthorities());
+        if(userToEdit != null){
+            userToEdit.setFirstName(userServiceModel.getFirstName());
+            userToEdit.setLastName(userServiceModel.getLastName());
+            userToEdit.setAddress(userServiceModel.getAddress());
+            userToEdit.setCity(userServiceModel.getCity());
+            userToEdit.setProfilePicURL(userServiceModel.getProfilePicURL());
+            userToEdit.setBackgroundPicURL(userServiceModel.getBackgroundPicURL());
+        }
 
-        return this.userRepository.save(userEntity) != null;
+        return this.userRepository.save(userToEdit) != null;
     }
 
 //    @Override

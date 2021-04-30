@@ -9,7 +9,7 @@ public class Comment {
     @Id
     private String id;
     private String author;
-    private String authorId;
+    private String loggedInUserId;
     private String content;
     private String shareId;
     private int like_num;
@@ -18,10 +18,10 @@ public class Comment {
     public Comment(){
 
     }
-    public Comment(String id, String author, String authorId, String content, String shareId, int like_num, String time){
+    public Comment(String id, String author, String loggedInUserId, String content, String shareId, int like_num, String time){
         this.id = id;
         this.author = author;
-        this.authorId = authorId;
+        this.loggedInUserId = loggedInUserId;
         this.content = content;
         this.shareId = shareId;
         this.like_num = like_num;
@@ -33,8 +33,8 @@ public class Comment {
     public String getAuthor(){
         return author;
     }
-    public String getAuthorId(){
-        return authorId;
+    public String getLoggedInUserId(){
+        return loggedInUserId;
     }
     public String getContent(){
         return content;
@@ -54,8 +54,8 @@ public class Comment {
     public void setAuthor(String author){
         this.author = author;
     }
-    public void setAuthorId(String authorId){
-        this.authorId = authorId;
+    public void setLoggedInUserId(String loggedInUserId){
+        this.loggedInUserId = loggedInUserId;
     }
     public void setContent(String content){
         this.content = content;

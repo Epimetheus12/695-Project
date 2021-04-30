@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-// import '../../styles/FormPages.css';
+import '../../static/css/FormPages.css';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { loginAction, redirectAction } from '../../actions/authActions';
 import {ToastComponent} from '../common';
+import Input from "@material-ui/core/Input";
+import {IconButton, InputAdornment} from "@material-ui/core";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Visibility from "@material-ui/icons/Visibility";
 
 
 class LoginPage extends Component {
@@ -15,12 +19,18 @@ class LoginPage extends Component {
             password: '',
             touched: {
                 username: false,
-                password: false
+                password: false,
+                hiddenPass: false
             }
         };
 
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
+        this.onShowPassword = this.onShowPassword.bind(this);
+    }
+
+    onShowPassword() {
+        this.setState({"touched":{hiddenPass: !this.state.touched.hiddenPass}})
     }
 
     componentDidUpdate(prevProps, prevState,_prevContext) {
@@ -113,8 +123,8 @@ class LoginPage extends Component {
 
                         <div className="form-group">
                             <label htmlFor="password" >Password</label>
-                            <input
-                                type="password"
+                            <Input
+                                type={this.state.touched.hiddenPass ? "text":"password"}
                                 className={"form-control " + (shouldMarkError('password') ? "error" : "")}
                                 id="password"
                                 name="password"
@@ -123,8 +133,16 @@ class LoginPage extends Component {
                                 onBlur={this.handleBlur('password')}
                                 aria-describedby="passwordHelp"
                                 placeholder="Enter password"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={this.onShowPassword}>
+                                            {this.state.touched.hiddenPass ? <VisibilityOff />:<Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>}
                             />
-                            {shouldMarkError('password') && <small id="passwordHelp" className="form-text alert alert-danger">Password is required!</small>}
+                            {shouldMarkError('password') && <small id="passwordHelp" className="form-text alert alert-danger">{(!this.state.password ? 'Password is required!' : 'Password should be at least 8 and maximum 30 characters long, and should contain number, upper case and lower case alphabet, special character!')}</small>}
                         </div>
 
                         <div className="text-center">

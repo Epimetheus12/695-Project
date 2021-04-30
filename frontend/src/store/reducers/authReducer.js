@@ -29,7 +29,7 @@ function loginReducer(state = { success: false }, action) {
 function registerErrorReducer (state = {hasError: false, message: ''}, action) {
     switch (action.type) {
         case REGISTER_ERROR:
-            return Object.assign({}, state, {hasError: true, message: action.messsage})
+            return Object.assign({}, state, {hasError: true, message: action.message})
         case REGISTER_SUCCESS:
             return Object.assign({}, state, {hasError: false, message: ''})
         default:
@@ -40,7 +40,7 @@ function registerErrorReducer (state = {hasError: false, message: ''}, action) {
 function loginErrorReducer (state = {hasError: false, message: ''}, action) {
     switch (action.type) {
         case LOGIN_ERROR:
-            return Object.assign({}, state, {hasError: true, message: action.messsage})
+            return Object.assign({}, state, {hasError: true, message: action.message})
         case LOGIN_SUCCESS:
             return Object.assign({}, state, {hasError: false, message: ''})
         default:

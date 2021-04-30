@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
-// import '../../styles/FormPages.css'
+import '../../static/css/FormPages.css';
 import { toast } from 'react-toastify';
 import { ToastComponent } from '../common';
-// import placeholder_user_image from '../../assets/images/placeholder.png';
-// import default_background_image from '../../assets/images/default-background-image.jpg';
+import default_user_image from '../../static/images/placeholder.png';
+import default_background_image from '../../static/images/default-background-image.jpg';
 import { connect } from 'react-redux';
 import { registerAction, redirectAction } from '../../store/actions/authActions'
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +14,7 @@ import {IconButton, InputAdornment} from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+// import {default} from "react-redux/lib/utils/Subscription";
 
 class RegisterPage extends Component {
     constructor(props) {
@@ -32,7 +33,8 @@ class RegisterPage extends Component {
             lastName: '',
             address: '',
             city: '',
-            picURl: '',
+            profilePicURL: default_user_image,
+            backgroundPicURL: default_background_image,
             touched: {
                 username: false,
                 nickname: false,
@@ -183,6 +185,23 @@ class RegisterPage extends Component {
                                     </div>
 
                                     <div className="form-group">
+                                        <label htmlFor="email" >Email Address</label>
+                                        <input
+                                            type="email"
+                                            className={"form-control " + (shouldMarkError('email') ? "error" : "")}
+                                            id="email"
+                                            name="email"
+                                            value={this.state.email}
+                                            onChange={this.onChangeHandler}
+                                            onBlur={this.handleBlur('email')}
+                                            aria-describedby="emailHelp"
+                                            placeholder="Enter email"
+                                        />
+                                        {shouldMarkError('email') && <small id="emailHelp" className="form-text alert alert-danger">{(!this.state.email ? 'Email is required!' : 'Invalid e-mail address!')}</small>}
+                                    </div>
+
+
+                                    <div className="form-group">
                                         <label htmlFor="nickname" >Nickname</label>
                                         <input
                                             type="text"
@@ -199,12 +218,53 @@ class RegisterPage extends Component {
                                     </div>
 
                                     <div className="form-group">
+                                        <label htmlFor="password" >Password</label>
+                                        <Input
+                                            type={this.state.touched.hiddenPass ? "text":"password"}
+                                            className={"form-control " + (shouldMarkError('password') ? "error" : "")}
+                                            id="password"
+                                            name="password"
+                                            value={this.state.password}
+                                            onChange={this.onChangeHandler}
+                                            onBlur={this.handleBlur('password')}
+                                            aria-describedby="passwordHelp"
+                                            placeholder="Enter password"
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={this.onShowPassword}>
+                                                        {this.state.touched.hiddenPass ? <VisibilityOff />:<Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>}
+                                        />
+                                        {shouldMarkError('password') && <small id="passwordHelp" className="form-text alert alert-danger">{(!this.state.password ? 'Password is required!' : 'Password should be at least 8 and maximum 30 characters long, and should contain number, upper case and lower case alphabet, special character!')}</small>}
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="confirmPassword" >Confirm Password</label>
+                                        <input
+                                            type="password"
+                                            className={"form-control " + (shouldMarkError('confirmPassword') ? "error" : "")}
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            value={this.state.confirmPassword}
+                                            onChange={this.onChangeHandler}
+                                            onBlur={this.handleBlur('confirmPassword')}
+                                            aria-describedby="confirmPasswordHelp"
+                                            placeholder="Confirm your password"
+                                        />
+                                        {shouldMarkError('confirmPassword') && <small id="confirmPasswordHelp" className="form-text alert alert-danger">Passwords do not match!</small>}
+                                    </div>
+
+
+
+                                    <div className="form-group">
                                         <label htmlFor="gender">Gender</label>
                                         <select id="gender"
                                                 name="gender"
                                                 className={"form-control " + (shouldMarkError('gender') ? "error" : "")}
                                                 defaultValue={this.state.gender}
-                                                de
                                                 onChange={this.onChangeHandler}
                                                 onSelect={this.onChangeHandler}
                                                 onBlur={this.handleBlur('gender')}
@@ -270,6 +330,22 @@ class RegisterPage extends Component {
                                     </div>
 
                                     <div className="form-group">
+                                        <label htmlFor="lastName" >Last Name</label>
+                                        <input
+                                            type="text"
+                                            className={"form-control " + (shouldMarkError('lastName') ? "error" : "")}
+                                            id="lastName"
+                                            name="lastName"
+                                            value={this.state.lastName}
+                                            onChange={this.onChangeHandler}
+                                            onBlur={this.handleBlur('lastName')}
+                                            aria-describedby="lastNameHelp"
+                                            placeholder="Enter last name"
+                                        />
+                                        {shouldMarkError('lastName') && <small id="lastNameHelp" className="form-text alert alert-danger">{(!this.state.lastName ? 'Last Name is required!' : 'Last Name must start with a capital letter and contain only letters!')}</small>}
+                                    </div>
+
+                                    <div className="form-group">
                                         <label htmlFor="address" >Address</label>
                                         <input
                                             type="text"
@@ -285,63 +361,7 @@ class RegisterPage extends Component {
                                         {shouldMarkError('address') && <small id="addressHelp" className="form-text alert alert-danger">{(!this.state.address ? 'Address is required!' : '')}</small>}
                                     </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="password" >Password</label>
-                                        <Input
-                                            type={this.state.touched.hiddenPass ? "text":"password"}
-                                            className={"form-control " + (shouldMarkError('password') ? "error" : "")}
-                                            id="password"
-                                            name="password"
-                                            value={this.state.password}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('password')}
-                                            aria-describedby="passwordHelp"
-                                            placeholder="Enter password"
-                                            endAdornment={
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        aria-label="toggle password visibility"
-                                                        onClick={this.onShowPassword}>
-                                                        {this.state.touched.hiddenPass ? <VisibilityOff />:<Visibility />}
-                                                    </IconButton>
-                                                </InputAdornment>}
-                                        />
-                                        {shouldMarkError('password') && <small id="passwordHelp" className="form-text alert alert-danger">{(!this.state.password ? 'Password is required!' : 'Password should be at least 8 and maximum 30 characters long, and should contain number, upper case and lower case alphabet, special character!')}</small>}
-                                    </div>
 
-
-
-                                    <div className="form-group">
-                                        <label htmlFor="email" >Email Address</label>
-                                        <input
-                                            type="email"
-                                            className={"form-control " + (shouldMarkError('email') ? "error" : "")}
-                                            id="email"
-                                            name="email"
-                                            value={this.state.email}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('email')}
-                                            aria-describedby="emailHelp"
-                                            placeholder="Enter email"
-                                        />
-                                        {shouldMarkError('email') && <small id="emailHelp" className="form-text alert alert-danger">{(!this.state.email ? 'Email is required!' : 'Invalid e-mail address!')}</small>}
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="lastName" >Last Name</label>
-                                        <input
-                                            type="text"
-                                            className={"form-control " + (shouldMarkError('lastName') ? "error" : "")}
-                                            id="lastName"
-                                            name="lastName"
-                                            value={this.state.lastName}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('lastName')}
-                                            aria-describedby="lastNameHelp"
-                                            placeholder="Enter last name"
-                                        />
-                                        {shouldMarkError('lastName') && <small id="lastNameHelp" className="form-text alert alert-danger">{(!this.state.lastName ? 'Last Name is required!' : 'Last Name must start with a capital letter and contain only letters!')}</small>}
-                                    </div>
 
                                     <div className="form-group">
                                         <label htmlFor="city" >City</label>
@@ -359,21 +379,7 @@ class RegisterPage extends Component {
                                         {shouldMarkError('city') && <small id="cityHelp" className="form-text alert alert-danger">{(!this.state.city ? 'City is required!' : '')}</small>}
                                     </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="confirmPassword" >Confirm Password</label>
-                                        <input
-                                            type="password"
-                                            className={"form-control " + (shouldMarkError('confirmPassword') ? "error" : "")}
-                                            id="confirmPassword"
-                                            name="confirmPassword"
-                                            value={this.state.confirmPassword}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('confirmPassword')}
-                                            aria-describedby="confirmPasswordHelp"
-                                            placeholder="Confirm your password"
-                                        />
-                                        {shouldMarkError('confirmPassword') && <small id="confirmPasswordHelp" className="form-text alert alert-danger">Passwords do not match!</small>}
-                                    </div>
+
                                 </section>
                             </div>
 
@@ -387,7 +393,7 @@ class RegisterPage extends Component {
             </Fragment>
         )
     }
-};
+}
 
 function mapStateToProps(state) {
     return {

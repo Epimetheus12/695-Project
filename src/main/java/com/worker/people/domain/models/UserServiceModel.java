@@ -23,10 +23,11 @@ public class UserServiceModel implements Serializable {
     private String address;
     private String city;
     private String[] hobby;
-    private String picURl;
+    private String profilePicURL;
+    private String backgroundPicURL;
     private Set<Role> authorities;
 
-    public UserServiceModel( ) {
+    public UserServiceModel() {
         this.authorities = new HashSet<>();
     }
 
@@ -94,12 +95,16 @@ public class UserServiceModel implements Serializable {
         return hobby;
     }
 
-    public String getPicURl( ) {
-        return picURl;
+    public String getProfilePicURL( ) {
+        return profilePicURL;
     }
 
     public Set<Role> getAuthorities( ) {
         return authorities;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setUsername(String username) {
@@ -162,8 +167,8 @@ public class UserServiceModel implements Serializable {
         this.hobby = hobby;
     }
 
-    public void setPicURl(String picURl) {
-        this.picURl = picURl;
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
     }
 
     public void setAuthorities(Set<Role> authorities) {
@@ -174,4 +179,11 @@ public class UserServiceModel implements Serializable {
         return this.getAuthorities().stream().findFirst().orElse(null).getAuthority();
     }
 
+    public String getBackgroundPicURL( ) {
+        return backgroundPicURL;
+    }
+
+    public void setBackgroundPicURL(String backgroundPicURL) {
+        this.backgroundPicURL = backgroundPicURL;
+    }
 }

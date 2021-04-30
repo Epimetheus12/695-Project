@@ -8,7 +8,8 @@ public class UserEditViewModel {
     private String lastName;
     private String address;
     private String city;
-    private String PicURL;
+    private String profilePicURL;
+    private String backgroundPicURL;
 
     public UserEditViewModel() {
     }
@@ -69,11 +70,19 @@ public class UserEditViewModel {
         this.city = city;
     }
 
-    public String getPicURL( ) {
-        return PicURL;
+    public String getProfilePicURL( ) {
+        return profilePicURL;
     }
 
-    public void setPicURL(String picURL) {
-        PicURL = picURL;
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
+    }
+
+    public String getBackgroundPicURL( ) {
+        return backgroundPicURL;
+    }
+
+    public void setBackgroundPicURL(String backgroundPicURL) {
+        this.backgroundPicURL = backgroundPicURL;
     }
 }

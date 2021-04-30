@@ -61,7 +61,7 @@ export default {
         if (token !== null && token !== undefined) {
             const payload = JSON.parse(atob(token.split('.')[1]));
             if (payload) {
-                return payload['profilePicUrl'];
+                return payload['profilePicURL'];
             }
         }
     },

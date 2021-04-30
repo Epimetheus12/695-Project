@@ -12,9 +12,11 @@ import java.io.Serializable;
 
 public class UserUpdateModel implements Serializable {
 
+    private String id;
+    private String username;
     private String email;
     private String nickname;
-    private String password;
+    /*private String password;*/
     private String summary;
     private String maritalStatus;
     private String[] follower;
@@ -24,14 +26,35 @@ public class UserUpdateModel implements Serializable {
     private String address;
     private String city;
     private String[] hobby;
-    private String picURl;
+    private String profilePicURL;
+    private String backgroundPicURL;
 
     public UserUpdateModel( ) {
     }
 
 
+    @NotNull(message = ValidationMessage.ID_REQUIRED_MESSAGE)
+    @Length(min = 1, message = ValidationMessage.ID_REQUIRED_MESSAGE)
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Pattern(regexp = "^([a-zA-Z0-9]+)$")
+    @Size(min = 4, max = 16, message = ValidationMessage.USER_INVALID_USERNAME_MESSAGE)
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Pattern(regexp = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", message = ValidationMessage.USER_INVALID_EMAIL_MESSAGE)
-    @UniqueEmail
+    /*@UniqueEmail*/
     public String getEmail( ) {
         return email;
     }
@@ -43,10 +66,10 @@ public class UserUpdateModel implements Serializable {
         return nickname;
     }
 
-    @Password(minLength = 8, maxLength = 30, passwordPattern = true, message = ValidationMessage.INVALID_CREDENTIALS_MESSAGE)
+    /*@Password(minLength = 8, maxLength = 30, passwordPattern = true, message = ValidationMessage.INVALID_CREDENTIALS_MESSAGE)
     public String getPassword( ) {
         return password;
-    }
+    }*/
 
     public String getSummary( ) {
         return summary;
@@ -91,9 +114,11 @@ public class UserUpdateModel implements Serializable {
         return hobby;
     }
 
-    public String getPicURl( ) {
-        return picURl;
+    public String getProfilePicURL( ) {
+        return profilePicURL;
     }
+
+    public String getBackgroundPicURL() { return backgroundPicURL;}
 
 
     public void setEmail(String email) {
@@ -105,9 +130,9 @@ public class UserUpdateModel implements Serializable {
         this.nickname = nickname;
     }
 
-    public void setPassword(String password) {
+    /*public void setPassword(String password) {
         this.password = password;
-    }
+    }*/
 
     public void setSummary(String summary) {
         this.summary = summary;
@@ -145,7 +170,9 @@ public class UserUpdateModel implements Serializable {
         this.hobby = hobby;
     }
 
-    public void setPicURl(String picURl) {
-        this.picURl = picURl;
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
     }
+
+    public void setBackgroundPicURL(String backgroundPicURL) { this.backgroundPicURL = backgroundPicURL;}
 }
