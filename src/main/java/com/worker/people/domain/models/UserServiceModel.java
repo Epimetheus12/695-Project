@@ -4,6 +4,7 @@ import com.worker.people.domain.entities.Role;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UserServiceModel implements Serializable {
@@ -16,8 +17,8 @@ public class UserServiceModel implements Serializable {
     private String summary;
     private String maritalStatus;
     private String birthday;
-    private String[] follower;
-    private String[] followed;
+    private List<String> follower;
+    private List<String> followed;
     private String firstName;
     private String lastName;
     private String address;
@@ -67,12 +68,12 @@ public class UserServiceModel implements Serializable {
         return birthday;
     }
 
-    public String[] getFollower( ) {
-        return follower;
+    public List<String> getFollowed( ) {
+        return followed;
     }
 
-    public String[] getFollowed( ) {
-        return followed;
+    public List<String> getFollower( ) {
+        return follower;
     }
 
     public String getFirstName( ) {
@@ -139,12 +140,12 @@ public class UserServiceModel implements Serializable {
         this.birthday = birthday;
     }
 
-    public void setFollower(String[] follower) {
-        this.follower = follower;
+    public void setFollowed(List<String> followed) {
+        this.followed = followed;
     }
 
-    public void setFollowed(String[] followed) {
-        this.followed = followed;
+    public void setFollower(List<String> follower) {
+        this.follower = follower;
     }
 
     public void setFirstName(String firstName) {

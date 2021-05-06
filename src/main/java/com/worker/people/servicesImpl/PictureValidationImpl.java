@@ -4,7 +4,7 @@ import com.worker.people.domain.entities.Picture;
 import com.worker.people.validations.PictureValidation;
 import org.springframework.stereotype.Component;
 
-
+@Component
 public class PictureValidationImpl implements PictureValidation {
     @Override
     public boolean isValid(Picture picture) {

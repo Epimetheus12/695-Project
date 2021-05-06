@@ -261,6 +261,48 @@ const fetchAllFriendsAction = (userId) => {
     }
 }
 
+const fetchAllFollowerSuccess = (followerArr) => {
+    return {
+        type: "FETCH_FOLLOWERS_SUCCESS",
+        payload: followerArr
+    }
+}
+
+const fetchAllFollowersBegin = () => {
+    return {
+        type: "FETCH_ALLFOLLOWERS_BEGIN",
+    }
+}
+
+const fetchAllFollowersError = (error, message, status, path) => {
+    return {
+        type: "FETCH_ALLFOLLOWERS_ERROR",
+        error,
+        message,
+        status,
+        path,
+    }
+}
+
+const fetchAllFollowerAction = (userId) => {
+    return (dispatch) => {
+        dispatch(fetchAllFollowersBegin())
+        return requester.get(`/api/user/follower/${userId}`, (response) => {
+            if (response.error) {
+                const { error, message, status, path } = response;
+                dispatch(fetchAllFollowersError(error, message, status, path));
+            } else {
+                dispatch(fetchAllFollowerSuccess(response));
+            }
+        }).catch(err => {
+            if (err.status === 403 && err.message === 'Your JWT token is expired. Please log in!') {
+                localStorage.clear();
+            }
+            dispatch(fetchAllFollowersError('', `Error: ${err.message}`, err.status, ''));
+        })
+    }
+}
+
 // changeAllFriends
 const changeAllFriendsSuccess = (friendsArr) => {
     return {
@@ -292,10 +334,60 @@ const updateAllFriendsAction = (friendsArr) => {
     }
 }
 
+const changeAllFollowerSuccess = (followerArr) => {
+    return {
+        type: "CHANGE_ALLFOLLOWERS_SUCCESS",
+        payload: followerArr
+    }
+}
+
+const changeAllFollowersBegin = () => {
+    return {
+        type: "CHANGE_ALLFOLLOWERS_BEGIN",
+    }
+}
+
+const changeAllFollowersError = (error, message, status, path) => {
+    return {
+        type: "CHANGE_ALLFOLLOWERS_ERROR",
+        error,
+        message,
+        status,
+        path,
+    }
+}
+
+const updateAllFollowerAction = (followerArr) => {
+    return {
+        type: "UPDATE_ALL_FOLLOWERS",
+        payload: followerArr
+    }
+}
+
+const changeAllFollowerAction = (userId) => {
+    return (dispatch) => {
+        dispatch(changeAllFollowersBegin())
+        return requester.get(`/api/user/follower/${userId}`, (response) => {
+            if (response.error) {
+                const { error, message, status, path } = response;
+                dispatch(changeAllFollowersError(error, message, status, path));
+            } else {
+                dispatch(updateAllFollowerAction(response));
+                dispatch(changeAllFollowerSuccess(response));
+            }
+        }).catch(err => {
+            if (err.status === 403 && err.message === 'Your JWT token is expired. Please log in!') {
+                localStorage.clear();
+            }
+            dispatch(changeAllFollowersError('', `Error: ${err.message}`, err.status, ''));
+        })
+    }
+}
+
 const changeAllFriendsAction = (userId) => {
     return (dispatch) => {
         dispatch(changeAllFriendsBegin())
-        return requester.get(`/relationship/friends/${userId}`, (response) => {
+        return requester.get(`/api/user/followed/${userId}`, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(changeAllFriendsError(error, message, status, path));
@@ -574,12 +666,14 @@ const removeFriendError = (error, message, status, path) => {
 const removeFriendAction = (loggedInUserId, friendToRemoveId) => {
     return (dispatch) => {
         dispatch(removeFriendBegin())
-        return requester.post('/relationship/removeFriend', { loggedInUserId, friendToRemoveId }, (response) => {
+        return requester.post('/api/user/removeFriend', { loggedInUserId, friendToRemoveId }, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(removeFriendError(error, message, status, path));
             } else {
                 dispatch(removeFriendSuccess(response, friendToRemoveId));
+                dispatch(changeAllFriendsAction(loggedInUserId));
+                dispatch(changeAllFollowerAction(loggedInUserId));
                 dispatch(fetchAllChatFriendsAction(loggedInUserId));
             }
         }).catch(err => {
@@ -662,11 +756,13 @@ const addFriendError = (error, message, status, path) => {
 const addFriendAction = (loggedInUserId, friendCandidateId) => {
     return (dispatch) => {
         dispatch(addFriendBegin())
-        return requester.post('/relationship/addFriend', {loggedInUserId, friendCandidateId}, (response) => {
+        return requester.post('/api/user/addFriend', {loggedInUserId, friendCandidateId}, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(addFriendError(error, message, status, path));
             } else {
+                dispatch(changeAllFriendsAction(loggedInUserId));
+                dispatch(changeAllFollowerAction(loggedInUserId));
                 dispatch(addFriendSuccess(response, friendCandidateId));
             }
         }).catch(err => {
@@ -838,4 +934,6 @@ export {
     cancelRequestAction,
     confirmRequestAction,
     searchResultsAction,
+    fetchAllFollowerAction,
+    changeAllFollowerAction
 };

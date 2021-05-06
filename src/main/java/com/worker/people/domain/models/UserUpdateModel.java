@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 public class UserUpdateModel implements Serializable {
 
@@ -19,8 +20,8 @@ public class UserUpdateModel implements Serializable {
     /*private String password;*/
     private String summary;
     private String maritalStatus;
-    private String[] follower;
-    private String[] followed;
+    private List<String> follower;
+    private List<String> followed;
     private String firstName;
     private String lastName;
     private String address;
@@ -80,12 +81,12 @@ public class UserUpdateModel implements Serializable {
         return maritalStatus;
     }
 
-    public String[] getFollower( ) {
-        return follower;
+    public List<String> getFollowed( ) {
+        return followed;
     }
 
-    public String[] getFollowed( ) {
-        return followed;
+    public List<String> getFollower( ) {
+        return follower;
     }
 
     @Pattern(regexp = "^[A-Z]([a-zA-Z]+)?$", message = ValidationMessage.USER_INVALID_FIRST_NAME_MESSAGE)
@@ -142,12 +143,12 @@ public class UserUpdateModel implements Serializable {
         this.maritalStatus = maritalStatus;
     }
 
-    public void setFollower(String[] follower) {
-        this.follower = follower;
+    public void setFollowed(List<String> followed) {
+        this.followed = followed;
     }
 
-    public void setFollowed(String[] followed) {
-        this.followed = followed;
+    public void setFollower(List<String> follower) {
+        this.follower = follower;
     }
 
     public void setFirstName(String firstName) {

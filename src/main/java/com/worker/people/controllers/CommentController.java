@@ -1,39 +1,71 @@
 package com.worker.people.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worker.people.domain.entities.Comment;
+import com.worker.people.domain.models.CommentCreateModel;
 import com.worker.people.repositories.CommentRepository;
+import com.worker.people.services.CommentService;
+import com.worker.people.utils.CustomException;
+import static com.worker.people.utils.messages.ResponseMessage.*;
+import com.worker.people.utils.responses.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/comment")
 public class CommentController {
 
-    @Autowired
-    CommentRepository commentRepository;
+    private final CommentService commentService;
+    private final ObjectMapper objectMapper;
 
-    public CommentController(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
+    @Autowired
+    public CommentController( CommentService commentService, ObjectMapper objectMapper) {
+        this.commentService = commentService;
+        this.objectMapper = objectMapper;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/comment/all")
+    /*public CommentController(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }*/
+
+    /*@RequestMapping(method = RequestMethod.GET, value = "/comment/all")
     public List<Comment> getAllComments() {
         return commentRepository.findAll();
+    }*/
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<Object> createComment(@RequestBody @Valid CommentCreateModel commentCreateModel) throws Exception {
+        boolean comment = this.commentService.createComment(commentCreateModel);
+        if (comment) {
+            SuccessResponse successResponse = new SuccessResponse(LocalDateTime.now(), SUCCESSFUL_CREATE_COMMENT_MESSAGE, "", true);
+            return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);
+        }
+        throw new CustomException(SERVER_ERROR_MESSAGE);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/comment/create")
-    public Comment save(@RequestBody Comment comment){
-        commentRepository.save(comment);
+    @PostMapping(value = "/remove")
+    public ResponseEntity removeComment(@RequestBody Map<String, Object> body) throws Exception {
+        String loggedInUserId = (String) body.get("loggedInUserId");
+        String commentToRemoveId = (String) body.get("commentToRemoveId");
 
-        return comment;
+        CompletableFuture<Boolean> result = this.commentService.deleteComment(loggedInUserId, commentToRemoveId);
+        if (result.get()) {
+            SuccessResponse successResponse = new SuccessResponse(LocalDateTime.now(), SUCCESSFUL_DELETE_COMMENT_MESSAGE, "", true);
+            return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);
+        }
+        throw new CustomException(SERVER_ERROR_MESSAGE);
     }
 
-    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
     public Comment getCommentById(@PathVariable String id) {
         Optional<Comment> comment;
         comment = commentRepository.findById(id);
@@ -68,5 +100,5 @@ public class CommentController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 }

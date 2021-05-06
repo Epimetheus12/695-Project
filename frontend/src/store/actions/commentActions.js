@@ -31,11 +31,12 @@ const createCommentError = (error, message, status, path) => {
     }
 }
 
-const createCommentAction = (postId, loggedInUserId, timelineUserId, content, imageUrl) => {
-    const requestBody = { postId, loggedInUserId, timelineUserId, content, imageUrl }
+const createCommentAction = (shareId, loggedInUserId, timelineUserId, content, imageUrl) => {
+    console.log("============================"+ shareId);
+    const requestBody = { shareId, loggedInUserId, timelineUserId, content, imageUrl }
     return (dispatch) => {
         dispatch(createCommentBegin())
-        return requester.post('/comment/create', requestBody, (response) => {
+        return requester.post('/api/comment/create', requestBody, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(createCommentError(error, message, status, path));
@@ -80,7 +81,7 @@ const removeCommentAction = (loggedInUserId, commentToRemoveId, timelineUserId) 
     const requestBody = { loggedInUserId, commentToRemoveId }
     return (dispatch) => {
         dispatch(removeCommentBegin())
-        return requester.post('/comment/remove', requestBody, (response) => {
+        return requester.post('/api/comment/remove', requestBody, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(removeCommentError(error, message, status, path));

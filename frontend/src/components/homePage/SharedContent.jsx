@@ -7,9 +7,13 @@ import WritePost from './WritePost';
 import WriteComment from './WriteComment';
 
 import { connect } from 'react-redux';
-import { createPostAction, fetchAllPostsAction, removePostAction, addLikePostAction } from '../../store/actions/postActions';
+import { createPostAction, fetchAllPostsAction, removePostAction, addLikePostAction/*, fetchAllCommentAction*/} from '../../store/actions/postActions';
 import { createCommentAction, removeCommentAction, addLikeCommentAction } from '../../store/actions/commentActions';
-import { changeCurrentTimeLineUserAction, changeAllFriendsAction } from '../../store/actions/userActions';
+import {
+    changeCurrentTimeLineUserAction,
+    changeAllFriendsAction,
+    changeAllFollowerAction
+} from '../../store/actions/userActions';
 /*import { changeAllPicturesAction } from '../../store/actions/pictureActions';*/
 
 class MainSharedContent extends Component {
@@ -28,6 +32,7 @@ class MainSharedContent extends Component {
         this.removeComment = this.removeComment.bind(this);
         this.createPost = this.createPost.bind(this);
         this.createComment = this.createComment.bind(this);
+        /*this.getAllComment = this.getAllComment.bind(this);*/
     }
 
     componentDidMount = () => {
@@ -137,16 +142,26 @@ class MainSharedContent extends Component {
         this.props.loadAllPosts(timelineUserId);
     }
 
-    createPost(content, imageUrl) {
+    createPost(content, datas) {
         const loggedInUserId = this.props.loggedInUser.id;
         const timelineUserId = this.props.timeLineUser.id;
-        this.props.createPost(timelineUserId, loggedInUserId, content, imageUrl);
+        /*console.log("test ============" + datas);*/
+        let data = new FormData();
+        data.append("timelineUserId", timelineUserId)
+        data.append("loggedInUserId", loggedInUserId)
+        data.append("content", content)
+        data.append("len", datas.length)
+        for(let i =0; i < datas.length; i++){
+            data.append("file" + i, datas[i])
+        }
+        this.props.createPost(timelineUserId, data);
     }
 
-    createComment(postId, content, imageUrl) {
+    createComment(shareId, content, imageUrl) {
         const loggedInUserId = this.props.loggedInUser.id;
         const timelineUserId = this.props.timeLineUser.id;
-        this.props.createComment(postId, loggedInUserId, timelineUserId, content, imageUrl);
+        /*console.log("======================="+ shareId);*/
+        this.props.createComment(shareId, loggedInUserId, timelineUserId, content, imageUrl);
     }
 
     removePost(postId) {
@@ -173,6 +188,11 @@ class MainSharedContent extends Component {
         this.props.addLikeComment(loggedInUserId, commentId, timelineUserId);
     }
 
+    /*getAllComment(shareId){
+        console.log(this.props.getAllComment(shareId));
+        return this.props.getAllComment(shareId)
+    }*/
+
     render() {
         return (
             <Fragment >
@@ -185,7 +205,7 @@ class MainSharedContent extends Component {
                     />
                     <section className="post-content-section">
                         {this.state.allPostsArr.map((post, index) =>
-                            <Fragment key={post.postId}>
+                            <Fragment key={post.id}>
                                 <Post
                                     addLike={this.addLike}
                                     removePost={this.removePost}
@@ -193,7 +213,9 @@ class MainSharedContent extends Component {
                                     removeComment={this.removeComment}
                                     {...post}
                                     timelineUserId={this.props.timeLineUser.id}
+                                    imageUrls={post.imageUrls}
                                     currentLoggedInUserId={this.props.loggedInUser.id}
+                                    /*getComment={this.getAllComment}*/
                                 />
 
                                 <WriteComment
@@ -203,7 +225,7 @@ class MainSharedContent extends Component {
                                     createComment={this.createComment}
                                     createCommentData={this.props.createCommentData}
                                     loadingAllPosts={this.props.fetchAllPosts.loading}
-                                    postId={post.postId}
+                                    postId={post.id}
                                 />
                             </Fragment >
                         )}
@@ -235,14 +257,16 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadAllPosts: (userId) => { dispatch(fetchAllPostsAction(userId)) },
-        createPost: (loggedInUserId, postId, timelineUserId) => { dispatch(createPostAction(loggedInUserId, postId, timelineUserId)) },
-        removePost: (loggedInUserId, postId, timelineUserId) => { dispatch(removePostAction(loggedInUserId, postId, timelineUserId)) },
+        createPost: (timelineUserId, data) => { dispatch(createPostAction(timelineUserId, data)) },
+        removePost: (loggedInUserId, shareId, timelineUserId) => { dispatch(removePostAction(loggedInUserId, shareId, timelineUserId)) },
         addLikePost: (loggedInUserId, postId, timelineUserId) => { dispatch(addLikePostAction(loggedInUserId, postId, timelineUserId)) },
-        createComment: (postId, loggedInUserId, timelineUserId, content, imageUrl) => { dispatch(createCommentAction(postId, loggedInUserId, timelineUserId, content, imageUrl)) },
+        createComment: (shareId, loggedInUserId, timelineUserId, content, imageUrl) => { dispatch(createCommentAction(shareId, loggedInUserId, timelineUserId, content, imageUrl)) },
         removeComment: (loggedInUserId, commentId, timelineUserId) => { dispatch(removeCommentAction(loggedInUserId, commentId, timelineUserId)) },
         addLikeComment: (loggedInUserId, commentId, timelineUserId) => { dispatch(addLikeCommentAction(loggedInUserId, commentId, timelineUserId)) },
         changeTimeLineUser: (userId) => { dispatch(changeCurrentTimeLineUserAction(userId)) },
-        changeAllFriends: (userId) => { dispatch(changeAllFriendsAction(userId)) }
+        changeAllFriends: (userId) => { dispatch(changeAllFriendsAction(userId)) },
+        changeAllFollower: (userId) => {dispatch(changeAllFollowerAction(userId))}
+        /*getAllComment:(shareId) => {dispatch(fetchAllCommentAction(shareId))}*/
 /*        changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },*/
     }
 }

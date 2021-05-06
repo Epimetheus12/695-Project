@@ -11,16 +11,16 @@ const FriendsGallery = (props) => {
                     <div className="aside-article-icon">
                         <i className="fas fa-user-friends"></i>
                     </div>
-                    <NavLink className="friends " exact to={`/home/friends/${props.timeLineUserId}`}>
+                    <NavLink className="friends " exact to={`/home/${props.articleText.toLowerCase()}/${props.timeLineUserId}`}>
                         <h3 className="aside-article-title" style={{ color: ' #333' }}>
-                            Friends &bull; {props.friendsArr.length}
+                            {props.articleText} &bull; {props.friendsArr.length}
                         </h3>
                     </NavLink>
                 </div>
                 <div className="hr-styles" style={{'width': '90%'}}></div>
                 <ul className="aside-article-gallery ">
                     {props.friendsArr.map(friend => {
-                        const profilePicUrl = friend.profilePicUrl || placeholder_user_image
+                        const profilePicUrl = friend.profilePicURL || placeholder_user_image
                         const imageClassName = userService.getImageSize(profilePicUrl);
                         let formattedUsername = '';
                         if(friend.firstName.length > 10){

@@ -7,7 +7,7 @@ public class FriendsCandidatesViewModel {
     private String username;
     private String profilePicURL;
     private String backgroundPicURL;
-    private Boolean starterOfAction = false;
+    private Boolean isFollowed = false;
 
     public FriendsCandidatesViewModel() {
     }
@@ -60,12 +60,12 @@ public class FriendsCandidatesViewModel {
         this.backgroundPicURL = backgroundPicURL;
     }
 
-    public Boolean getStarterOfAction() {
-        return this.starterOfAction;
+    public Boolean getIsFollowed() {
+        return this.isFollowed;
     }
 
-    public void setStarterOfAction(Boolean starterOfAction) {
-        this.starterOfAction = starterOfAction;
+    public void setIsFollowed(Boolean isFollowed) {
+        this.isFollowed = isFollowed;
     }
 
 //    public Integer getStatus() {

@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.List;
 import java.util.Set;
 
 @Document(collection = "users")
@@ -18,8 +19,8 @@ public class User implements UserDetails {
     private String summary;
     private String maritalStatus;
     private String birthday;
-    private String[] follower;
-    private String[] followed;
+    private List<String> follower;
+    private List<String> followed;
     private String firstName;
     private String lastName;
     private String address;
@@ -39,7 +40,7 @@ public class User implements UserDetails {
 
     }
 
-    public User(String id, String username, String email, String gender, String nickname, String password, String summary, String maritalStatus, String birthday, String[] follower, String[] followed, String firstName, String lastName, String address, String city, String[] hobby, String profilePicURL, String backgroundPicURL, Set<Role> authorities) {
+    public User(String id, String username, String email, String gender, String nickname, String password, String summary, String maritalStatus, String birthday, List<String> follower, List<String> followed, String firstName, String lastName, String address, String city, String[] hobby, String profilePicURL, String backgroundPicURL, Set<Role> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -59,8 +60,6 @@ public class User implements UserDetails {
         this.profilePicURL = profilePicURL;
         this.backgroundPicURL = backgroundPicURL;
         this.authorities = authorities;
-
-
     }
 
     public String getId( ) {
@@ -119,12 +118,12 @@ public class User implements UserDetails {
         return birthday;
     }
 
-    public String[] getFollower( ) {
-        return follower;
+    public List<String> getFollowed( ) {
+        return followed;
     }
 
-    public String[] getFollowed( ) {
-        return followed;
+    public List<String> getFollower( ) {
+        return follower;
     }
 
     public String getFirstName( ) {
@@ -183,12 +182,12 @@ public class User implements UserDetails {
         this.birthday = birthday;
     }
 
-    public void setFollower(String[] follower) {
-        this.follower = follower;
+    public void setFollowed(List<String> followed) {
+        this.followed = followed;
     }
 
-    public void setFollowed(String[] followed) {
-        this.followed = followed;
+    public void setFollower(List<String> follower) {
+        this.follower = follower;
     }
 
     public void setFirstName(String firstName) {

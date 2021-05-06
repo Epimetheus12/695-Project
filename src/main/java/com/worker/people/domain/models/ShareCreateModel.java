@@ -1,14 +1,17 @@
 package com.worker.people.domain.models;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
 public class ShareCreateModel {
 
     private String timelineUserId;
     private String loggedInUserId;
     private String content;
-    private String imageUrl;
+    private ArrayList<MultipartFile> datas;
 
     public ShareCreateModel() {
     }
@@ -43,11 +46,11 @@ public class ShareCreateModel {
         this.content = content;
     }
 
-    public String getImageUrl() {
-        return this.imageUrl;
+    public ArrayList<MultipartFile> getDatas( ) {
+        return datas;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setDatas(ArrayList<MultipartFile> datas) {
+        this.datas = datas;
     }
 }

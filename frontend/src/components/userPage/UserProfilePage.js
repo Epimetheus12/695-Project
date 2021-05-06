@@ -4,7 +4,11 @@ import { Button, ButtonWithClickEvent } from '../common';
 import './css/UserProfilePage.css';
 
 import { connect } from 'react-redux';
-import { changeCurrentTimeLineUserAction, changeAllFriendsAction } from '../../store/actions/userActions';
+import {
+    changeCurrentTimeLineUserAction,
+    changeAllFriendsAction,
+    changeAllFollowerAction
+} from '../../store/actions/userActions';
 /*import { changeAllPicturesAction } from '../../store/actions/pictureActions';*/
 
 class UserProfilePage extends Component {
@@ -38,6 +42,8 @@ class UserProfilePage extends Component {
                 this.props.changeTimeLineUser(currentTimeLineUserId);
                 /*this.props.changeAllPictures(currentTimeLineUserId);*/
                 this.props.changeAllFriends(currentTimeLineUserId);
+                this.props.changeAllFollower(currentTimeLineUserId);
+
             }
         )
     }
@@ -168,6 +174,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         changeTimeLineUser: (userId) => { dispatch(changeCurrentTimeLineUserAction(userId)) },
         changeAllFriends: (userId) => {dispatch(changeAllFriendsAction(userId))},
+        changeAllFollower: (userId) => {dispatch(changeAllFollowerAction(userId))},
         /*changeAllPictures: (userId) => {dispatch(changeAllPicturesAction(userId))},*/
     }
 }

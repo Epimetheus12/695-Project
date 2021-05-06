@@ -88,6 +88,17 @@ export default {
             body: data
         }).then(checkStatus)
             .then(callback)
+    },
+
+    putPhoto: (endpoint, data, callback) => {
+        return fetch(BASE_URL + endpoint, {
+            method: 'PUT',
+            headers: {
+                ...getAuthHeader(),
+            },
+            body: data
+        }).then(checkStatus)
+            .then(callback);
     }
 }
 

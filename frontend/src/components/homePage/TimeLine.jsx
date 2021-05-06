@@ -19,15 +19,15 @@ const TimeLine = (props) => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink className="friends " exact to={`/home/friends/${props.id}`}>
+                        <NavLink className="friends " exact to={`/home/followed/${props.id}`}>
                             <i className="fas fa-user-friends"></i>
-                            <div>Followed</div>
+                            <div>FOLLOWED</div>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink className="friends " exact to={`/home/friends/${props.id}`}>
+                        <NavLink className="friends " exact to={`/home/follower/${props.id}`}>
                             <i className="fas fa-user-friends"></i>
-                            <div>Follower</div>
+                            <div>FOLLOWER</div>
                         </NavLink>
                     </li>
                     <li>

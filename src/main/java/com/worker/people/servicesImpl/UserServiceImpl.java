@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import static com.worker.people.utils.messages.ResponseMessage.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,8 +77,8 @@ public class UserServiceImpl implements UserService {
         }
 
         userEntity.setAuthorities(roles);
-        userEntity.setFollowed(new String[0]);
-        userEntity.setFollower(new String[0]);
+        userEntity.setFollowed(new ArrayList<>());
+        userEntity.setFollower(new ArrayList<>());
         User user = this.userRepository.save(userEntity);
         if (user != null) {
             return this.modelMapper.map(userEntity, UserCreateViewModel.class);

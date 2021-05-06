@@ -81,7 +81,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 1. **Home Page**
 
- ![App Screenshot](readme-images/kl-social-network-home-gregor.PNG)
+ ![App Screenshot](path)
 
 2. **Followed Page**
 

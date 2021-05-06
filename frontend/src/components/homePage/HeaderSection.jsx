@@ -5,11 +5,11 @@ import placeholder_user_image from '../../static/images/placeholder.png';
 import default_background_image from '../../static/images/default-background-image.jpg';
 
 const HeaderSection = (props) => {
-    const profilePicUrl = props.profilePicUrl || placeholder_user_image;
-    const backgroundImageUrl = props.backgroundImageUrl || default_background_image
+    const profilePicUrl = props.profilePicURL || placeholder_user_image;
+    const backgroundImageUrl = props.backgroundPicURL || default_background_image
     let imgClassName = '';
 
-    if(props.profilePicUrl){
+    if(props.profilePicURL){
         imgClassName = userService.getImageSize(profilePicUrl);
     }
 

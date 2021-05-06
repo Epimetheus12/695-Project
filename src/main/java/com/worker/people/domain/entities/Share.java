@@ -5,7 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "shares")
 public class Share {
@@ -14,11 +15,10 @@ public class Share {
     private String author;
     private String authorId;
     private String content;
-    private String shareId;
-    private int likeNum;
+    private List<String> likeNum;
     private LocalDateTime time;
-    private String[] commentId;
-//    private String[] imageID;
+    private List<String> commentList;
+    private ArrayList<String> imageUrls;
 
     public Share() {
 
@@ -40,12 +40,12 @@ public class Share {
         return content;
     }
 
-    public String getShareId() {
-        return shareId;
+    public List<String> getLikeNum( ) {
+        return likeNum;
     }
 
-    public int getLikeNum() {
-        return likeNum;
+    public void setLikeNum(List<String> likeNum) {
+        this.likeNum = likeNum;
     }
 
     public LocalDateTime getTime() {
@@ -68,15 +68,25 @@ public class Share {
         this.content = content;
     }
 
-    public void setShareId(String shareId) {
-        this.shareId = shareId;
-    }
 
-    public void setLikeNum(int likeNum) {
-        this.likeNum = likeNum;
-    }
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public List<String> getCommentList( ) {
+        return commentList;
+    }
+
+    public void setCommentList(List<String> commentList) {
+        this.commentList = commentList;
+    }
+
+    public ArrayList<String> getImageUrls( ) {
+        return imageUrls;
+    }
+
+    public void setImageUrls(ArrayList<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 }

@@ -15,12 +15,19 @@ import FriendsGallery from './FriendGallery';
 import { connect } from 'react-redux';
 import { fetchPicturesAction } from '../../store/actions/pictureActions';
 // import { fetchAllUnreadMessagesAction } from '../../store/actions/messageActions';
-import { fetchLoggedInUserAction, fetchTimeLineUserAction, fetchAllFriendsAction, findFriendsAction } from '../../store/actions/userActions';
+import {
+    fetchLoggedInUserAction,
+    fetchTimeLineUserAction,
+    fetchAllFriendsAction,
+    findFriendsAction,
+    fetchAllFollowerAction
+} from '../../store/actions/userActions';
 import PictureGallery from "./pictureGallery";
 
 const UserSearchResultsPage = lazy(() => import('../userPage/UserSearchResultsPage'));
 const UserProfilePage = lazy(() => import('../userPage/UserProfilePage'));
-const UserFriendsAllPage = lazy(() => import('../userPage/UserAllFriendsPage'));
+const UserFollowedPage = lazy(() => import('../userPage/UserFollowedPage'));
+const UserFollowerPage = lazy(() => import('../userPage/UserFollowerPage'));
 const UserFindFriendsPage = lazy(() => import('../userPage/UserFindFriendPage'));
 const UserFriendRequestsPage = lazy(() => import('../userPage/UserFriendRequestPage'));
 // const UserAllPage = lazy(() => import('../user/UserAllPage'));
@@ -47,6 +54,7 @@ class HomePage extends Component {
 
         this.loadAllPictures = this.loadAllPictures.bind(this);
         this.loadAllFriends = this.loadAllFriends.bind(this);
+        /*this.loadAllFollower = this.loadAllFollower.bind(this);*/
     }
 
     componentDidMount() {
@@ -56,6 +64,7 @@ class HomePage extends Component {
         this.props.loadLoggedInUserData(userId);
         this.loadAllPictures(timeLineUserId);
         this.loadAllFriends(timeLineUserId);
+        /*this.loadAllFollower(timeLineUserId);*/
         this.props.findFriends(userId);
         /*this.props.loadAllUnreadMessages();*/
 
@@ -87,6 +96,9 @@ class HomePage extends Component {
         else if (!this.props.fetchAllFriends.hasError && this.props.fetchAllFriends.message && this.props.fetchAllFriends !== prevProps.fetchAllFriends) {
             return this.props.fetchAllFriends.message;
         }
+        /*else if (!this.props.fetchAllFollower.hasError && this.props.fetchAllFollower.message && this.props.fetchAllFollower !== prevProps.fetchAllFollower) {
+            return this.props.fetchAllFollower.message;
+        }*/
         return null;
     }
 
@@ -100,6 +112,9 @@ class HomePage extends Component {
         else if (this.props.fetchAllFriends.hasError && prevProps.fetchAllFriends.error !== this.props.fetchAllFriends.error) {
             return this.props.fetchAllFriends.message || 'Server Error';
         }
+       /* else if (!this.props.fetchAllFollower.hasError && this.props.fetchAllFollower.message && this.props.fetchAllFollower !== prevProps.fetchAllFollower) {
+            return this.props.fetchAllFollower.message;
+        }*/
 
         return null;
     }
@@ -111,6 +126,10 @@ class HomePage extends Component {
     loadAllFriends = (userId) => {
         this.props.loadAllFriends(userId);
     }
+
+    /*loadAllFollower = (userId) =>{
+        this.loadAllFriends(userId);
+    }*/
 
     render() {
         const isRoot = userService.isRoot();
@@ -143,7 +162,8 @@ class HomePage extends Component {
                                 {(loggedIn && isRoot) && <Route exact path="/home/users/delete/:id" component={UserDeletePage} />}*/}
                                 {loggedIn && <Route exact path="/home/gallery/:id" component={UserGalleryPage} />} />}
                                 {/*{(loggedIn && (isRoot || isAdmin)) && <Route exact path="/home/logs/:id" component={UserLogsPage} />}*/}
-                                {loggedIn && <Route exact path="/home/friends/:id" component={UserFriendsAllPage} />}
+                                {loggedIn && <Route exact path="/home/followed/:id" component={UserFollowedPage} />}
+                                {loggedIn && <Route exact path="/home/follower/:id" component={UserFollowerPage} />}
                                 {loggedIn && <Route exact path="/home/findFriends/:id" component={UserFindFriendsPage} />}
                                 {loggedIn && <Route exact path="/home/friendRequests/:id" component={UserFriendRequestsPage} />}
                                 {loggedIn && <Route exact path="/home/users/search/" component={UserSearchResultsPage} />}
@@ -157,7 +177,8 @@ class HomePage extends Component {
                         <section className="aside-section">
                             <Intro {...this.props.timeLineUserData} />
                             <PictureGallery picturesArr={this.props.picturesArr} timeLineUserId={this.props.timeLineUserData.id} />
-                            <FriendsGallery friendsArr={this.props.friendsArr} timeLineUserId={this.props.timeLineUserData.id} />
+                            <FriendsGallery articleText={"Followed"} friendsArr={this.props.friendsArr} timeLineUserId={this.props.timeLineUserData.id} />
+                            <FriendsGallery articleText={"Follower"} friendsArr={this.props.followerArr} timeLineUserId={this.props.timeLineUserData.id}/>
                             {/*<MessageBox />*/}
                         </section>
                     </Fragment>
@@ -174,7 +195,11 @@ const mapStateToProps = (state) => {
         timeLineUserData: state.timeLineUserData,
         loggedInUserData: state.loggedInUserData,
         friendsArr: state.fetchAllFriends.friendsArr,
+        followerArr: state.fetchAllFollower.followerArr,
+        fetchAllFollower: state.fetchAllFollower,
+        /*friendsArr: state.fetchAllFriends.friendsArr,*/
         fetchAllFriends: state.fetchAllFriends,
+
     }
 }
 
@@ -185,6 +210,7 @@ const mapDispatchToProps = (dispatch) => {
         loadTimelineUserData: (userId) => { dispatch(fetchTimeLineUserAction(userId)) },
         loadAllFriends: (userId) => { dispatch(fetchAllFriendsAction(userId)) },
         findFriends: (userId) => { dispatch(findFriendsAction(userId)) },
+        /*loadAllFollower: (userId) => {dispatch(fetchAllFollowerAction())}*/
         /*loadAllUnreadMessages: () => { dispatch(fetchAllUnreadMessagesAction()) },*/
     }
 }

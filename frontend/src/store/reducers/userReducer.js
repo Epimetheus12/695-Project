@@ -1063,8 +1063,8 @@ const searchResultsReducer = (state = initialStateSearchResults, action) => {
 }
 
 const setSearchResultsSuccessState = (state, response, search) => {
-    const friendsArrSearch = response.filter(user => user.status === 1);
-    const friendsCandidatesArr = response.filter(user => user.status !== 0 && user.status !== 1);
+    const friendsArrSearch = response.filter(user => {console.log(user.isFollowed + "test"); return user.isFollowed === true});
+    const friendsCandidatesArr = response.filter(user => user.isFollowed === false);
     const userWaitingForAcceptingRequest = response.filter(user => user.status === 0 && user.starterOfAction === true);
     const usersReceivedRequestFromCurrentUser = response.filter(user => user.status === 0 && user.starterOfAction === false);
 
@@ -1203,8 +1203,114 @@ const searchResultsRemoveFriend = (state, friendToRemoveId) => {
         return state;
     }
 
-
 }
+
+
+const initialStateChangeAllFollowers = {
+    followerArr: [],
+    hasError: false,
+    error: '',
+    message: '',
+    status: '',
+    path: '',
+    loading: false,
+}
+
+const changeAllFollowerReducer = (state = initialStateChangeAllFollowers, action) => {
+    switch (action.type) {
+        case "CHANGE_ALLFOLLOWERS_BEGIN":
+            return Object.assign({}, state, {
+                followerArr: [],
+                hasError: false,
+                error: '',
+                message: '',
+                status: '',
+                path: '',
+                loading: true,
+            })
+        case "CHANGE_ALLFOLLOWERS_SUCCESS":
+            return Object.assign({}, state, {
+                followerArr: [...action.payload],
+                hasError: false,
+                error: '',
+                message: '',
+                status: '',
+                path: '',
+                loading: false,
+            })
+        case "CHANGE_ALLFOLLOWERS_ERROR":
+            return Object.assign({}, state, {
+                followerArr: [],
+                hasError: true,
+                error: action.error,
+                message: action.message,
+                status: action.status,
+                path: action.path,
+                loading: false,
+            })
+        default:
+            return state
+    }
+}
+
+
+const initialStateAllFollowers = {
+    followerArr: [],
+    hasError: false,
+    error: '',
+    message: '',
+    status: '',
+    path: '',
+    loading: false,
+}
+
+const fetchAllFollowerReducer = (state = initialStateAllFollowers, action) => {
+    switch (action.type) {
+        case "FETCH_ALLFOLLOWERS_BEGIN":
+            return Object.assign({}, state, {
+                followerArr: [],
+                hasError: false,
+                error: '',
+                message: '',
+                status: '',
+                path: '',
+                loading: true,
+            })
+        case "FETCH_ALLFOLLOWERS_SUCCESS":
+            return Object.assign({}, state, {
+                followerArr: [...action.payload],
+                hasError: false,
+                error: '',
+                message: '',
+                status: '',
+                path: '',
+                loading: false,
+            })
+        case "FETCH_ALLFOLLOWERS_ERROR":
+            return Object.assign({}, state, {
+                followerArr: [],
+                hasError: true,
+                error: action.error,
+                message: action.message,
+                status: action.status,
+                path: action.path,
+                loading: false,
+            })
+        case "UPDATE_ALL_FOLLOWERS":
+            return Object.assign({}, state, {
+                followerArr: [...action.payload],
+                hasError: false,
+                error: '',
+                message: '',
+                status: '',
+                path: '',
+                loading: false,
+            })
+        default:
+            return state
+    }
+}
+
 
 export {
 /*    fetchAllChatFriendsReducer,*/
@@ -1224,4 +1330,6 @@ export {
     cancelRequestReducer,
     confirmRequestReducer,
     searchResultsReducer,
+    changeAllFollowerReducer,
+    fetchAllFollowerReducer
 }

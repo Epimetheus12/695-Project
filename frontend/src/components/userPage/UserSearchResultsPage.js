@@ -9,8 +9,9 @@ import './css/UserFriends.css';
 import { connect } from 'react-redux';
 import {
     changeCurrentTimeLineUserAction, changeAllFriendsAction, addFriendAction,
-    cancelRequestAction, confirmRequestAction, removeFriendAction, searchResultsAction
+    cancelRequestAction, confirmRequestAction, removeFriendAction, searchResultsAction, changeAllFollowerAction
 } from '../../store/actions/userActions';
+import {changeAllPicturesAction} from "../../store/actions/pictureActions";
 /*import { changeAllPicturesAction } from '../../store/actions/pictureActions';*/
 
 class UserSearchResultsPage extends Component {
@@ -23,8 +24,8 @@ class UserSearchResultsPage extends Component {
         };
 
         this.addFriend = this.addFriend.bind(this);
-        this.confirmRequest = this.confirmRequest.bind(this);
-        this.rejectRequest = this.rejectRequest.bind(this);
+        /*this.confirmRequest = this.confirmRequest.bind(this);
+        this.rejectRequest = this.rejectRequest.bind(this);*/
         this.removeFriend = this.removeFriend.bind(this);
     }
 
@@ -32,8 +33,9 @@ class UserSearchResultsPage extends Component {
         const loggedInUserId = userService.getUserId();
         if (loggedInUserId !== this.props.timeLineUserData.id) {
             this.props.changeTimeLineUser(loggedInUserId);
-            /*this.props.changeAllPictures(loggedInUserId);*/
+            this.props.changeAllPictures(loggedInUserId);
             this.props.changeAllFriends(loggedInUserId);
+            this.props.changeAllFollower(loggedInUserId);
         }
 
         this.setState({ready: true})
@@ -58,12 +60,12 @@ class UserSearchResultsPage extends Component {
         if (!this.props.addFriendData.hasError && this.props.addFriendData.message && this.props.addFriendData !== prevProps.addFriendData) {
             return this.props.addFriendData.message;
         }
-        else if (!this.props.cancelRequestData.hasError && this.props.cancelRequestData.message && this.props.cancelRequestData !== prevProps.cancelRequestData) {
+        /*else if (!this.props.cancelRequestData.hasError && this.props.cancelRequestData.message && this.props.cancelRequestData !== prevProps.cancelRequestData) {
             return this.props.cancelRequestData.message;
         }
         else if (!this.props.confirmRequestData.hasError && this.props.confirmRequestData.message && this.props.confirmRequestData !== prevProps.confirmRequestData) {
             return this.props.confirmRequestData.message;
-        }
+        }*/
         else if (!this.props.removeFriend.hasError && this.props.removeFriend.message && this.props.removeFriend !== prevProps.removeFriend) {
             return this.props.removeFriend.message;
         }
@@ -75,12 +77,12 @@ class UserSearchResultsPage extends Component {
         if (this.props.addFriendData.hasError && prevProps.addFriendData.error !== this.props.addFriendData.error) {
             return this.props.addFriendData.message || 'Server Error';
         }
-        else if (this.props.cancelRequestData.hasError && prevProps.cancelRequestData.error !== this.props.cancelRequestData.error) {
+        /*else if (this.props.cancelRequestData.hasError && prevProps.cancelRequestData.error !== this.props.cancelRequestData.error) {
             return this.props.cancelRequestData.message || 'Server Error';
         }
         else if (this.props.confirmRequestData.hasError && prevProps.confirmRequestData.error !== this.props.confirmRequestData.error) {
             return this.props.confirmRequestData.message || 'Server Error';
-        }
+        }*/
         else if (this.props.removeFriend.hasError && prevProps.removeFriend.error !== this.props.removeFriend.error) {
             return this.props.removeFriend.message || 'Server Error';
         }
@@ -93,6 +95,7 @@ class UserSearchResultsPage extends Component {
         this.props.addFriend(loggedInUserId, friendCandidateId);
     }
 
+/*
     confirmRequest = (friendToAcceptId) => {
         const loggedInUserId = this.props.loggedInUserData.id;
         this.props.acceptRequest(loggedInUserId, friendToAcceptId);
@@ -102,6 +105,7 @@ class UserSearchResultsPage extends Component {
         const loggedInUserId = this.props.loggedInUserData.id;
         this.props.cancelRequest(loggedInUserId, friendToRejectId);
     }
+*/
 
     removeFriend = (friendToRemoveId, event) => {
         const loggedInUserId = this.props.loggedInUserData.id
@@ -115,11 +119,11 @@ class UserSearchResultsPage extends Component {
 
         const friendsArrLength = this.props.friendsArrSearch.length;
         let friends = '';
-
+        /*console.log("test==================="+this.props.friendsArrSearch)*/
         if (friendsArrLength > 0) {
             friends = (
                 <Fragment>
-                    <h3 className="mt-5">Users From Your Friend List</h3>
+                    <h3 className="mt-5">Users From Your Followed List</h3>
                     <div className="hr-styles"></div>
                     {this.props.friendsArrSearch.map((friend) =>
                         <Friend
@@ -129,14 +133,14 @@ class UserSearchResultsPage extends Component {
                             firstButtonLink={`/home/profile/${friend.id}`}
                             secondButtonLink={`/`}
                             firstButtonText={'VIEW PROFILE'}
-                            secondButtonText={'REMOVE'}
+                            secondButtonText={'UNFOLLOW'}
                             secondButtonOnClick={this.removeFriend}
                         />)}
                 </Fragment>
             )
         }
 
-        const requestLength = this.props.userWaitingForAcceptingRequest.length;
+        /*const requestLength = this.props.userWaitingForAcceptingRequest.length;
         let requests = '';
         if (requestLength > 0) {
             requests = (
@@ -157,9 +161,9 @@ class UserSearchResultsPage extends Component {
                         />)}
                 </Fragment>
             )
-        }
+        }*/
 
-        let waitingForResponseUsers = this.props.usersReceivedRequestFromCurrentUser.length;
+        /*let waitingForResponseUsers = this.props.usersReceivedRequestFromCurrentUser.length;
         let friendsCandidates = '';
 
         if (waitingForResponseUsers > 0) {
@@ -182,7 +186,7 @@ class UserSearchResultsPage extends Component {
                     }
                 </Fragment>
             )
-        }
+        }*/
 
         let friendsCandidatesArr = this.props.friendsCandidatesArr.length;
         let remainCandidates = '';
@@ -201,7 +205,7 @@ class UserSearchResultsPage extends Component {
                                 firstButtonLink={`/home/profile/${friend.id}`}
                                 secondButtonLink={`/`}
                                 firstButtonText={'VIEW PROFILE'}
-                                secondButtonText={'ADD FRIEND'}
+                                secondButtonText={'FOLLOW'}
                                 secondButtonOnClick={this.addFriend}
                             />)
                     }
@@ -211,7 +215,7 @@ class UserSearchResultsPage extends Component {
 
         let noResult = '';
 
-        if (!friends && !requests && !friendsCandidates && !remainCandidates && !this.props.searchResults.loading) {
+        if (!friends &&  !remainCandidates && !this.props.searchResults.loading) {
             noResult = (
                 <Fragment>
                     <h2>No results for <span className="App-secondary-color">"{this.props.search}"</span></h2>
@@ -229,8 +233,8 @@ class UserSearchResultsPage extends Component {
                             <div className="hr-styles"></div>
                             <section className="friend-section" >
                                 {friends}
-                                {requests}
-                                {friendsCandidates}
+                                {/*{requests}
+                                {friendsCandidates}*/}
                                 {remainCandidates}
                                 {noResult}
                             </section>
@@ -251,12 +255,12 @@ const mapStateToProps = (state) => {
         search: state.searchResults.search,
         friendsArrSearch: state.searchResults.friendsArrSearch,
         friendsCandidatesArr: state.searchResults.friendsCandidatesArr,
-        userWaitingForAcceptingRequest: state.searchResults.userWaitingForAcceptingRequest,
-        usersReceivedRequestFromCurrentUser: state.searchResults.usersReceivedRequestFromCurrentUser,
+        /*userWaitingForAcceptingRequest: state.searchResults.userWaitingForAcceptingRequest,
+        usersReceivedRequestFromCurrentUser: state.searchResults.usersReceivedRequestFromCurrentUser*/
 
         addFriendData: state.addFriend,
-        cancelRequestData: state.cancelRequest,
-        confirmRequestData: state.confirmRequest,
+        /*cancelRequestData: state.cancelRequest,
+        confirmRequestData: state.confirmRequest,*/
         removeFriend: state.removeFriend
     }
 }
@@ -265,10 +269,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
         changeTimeLineUser: (userId) => { dispatch(changeCurrentTimeLineUserAction(userId)) },
         changeAllFriends: (userId) => { dispatch(changeAllFriendsAction(userId)) },
-/*        changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },*/
+        changeAllFollower: (userId) => {dispatch(changeAllFollowerAction(userId))},
+        changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },
         addFriend: (loggedInUserId, friendCandidateId) => { dispatch(addFriendAction(loggedInUserId, friendCandidateId)) },
-        cancelRequest: (loggedInUserId, friendToRejectId) => { dispatch(cancelRequestAction(loggedInUserId, friendToRejectId)) },
-        acceptRequest: (loggedInUserId, friendToAcceptId) => { dispatch(confirmRequestAction(loggedInUserId, friendToAcceptId)) },
+        /*cancelRequest: (loggedInUserId, friendToRejectId) => { dispatch(cancelRequestAction(loggedInUserId, friendToRejectId)) },
+        acceptRequest: (loggedInUserId, friendToAcceptId) => { dispatch(confirmRequestAction(loggedInUserId, friendToAcceptId)) },*/
         deleteFriend: (loggedInUserId, friendToRemoveId) => { dispatch(removeFriendAction(loggedInUserId, friendToRemoveId)) },
     }
 }

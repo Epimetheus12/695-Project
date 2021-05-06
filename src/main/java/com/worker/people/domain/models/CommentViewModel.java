@@ -11,7 +11,7 @@ public class CommentViewModel {
     private String creatorProfilePicUrl;
     private String timelineUserId;
     private String content;
-//    private String imageUrl;
+    private String imageUrl;
     private LocalDateTime time;
 
     public CommentViewModel() {
@@ -81,13 +81,13 @@ public class CommentViewModel {
         this.content = content;
     }
 
-//    public String getImageUrl() {
-//        return this.imageUrl;
-//    }
-//
-//    public void setImageUrl(String imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public LocalDateTime getTime() {
         return this.time;

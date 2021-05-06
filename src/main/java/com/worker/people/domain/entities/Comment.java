@@ -3,72 +3,78 @@ package com.worker.people.domain.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 
 @Document(collection = "comments")
 public class Comment {
     @Id
     private String id;
-    private String author;
-    private String loggedInUserId;
+    private Share share;
+    private User creator;
+    private User timelineUser;
     private String content;
-    private String shareId;
-    private int like_num;
-    private String time;
+    private LocalDateTime time;
+    private String imageUrl;
 
     public Comment(){
 
     }
-    public Comment(String id, String author, String loggedInUserId, String content, String shareId, int like_num, String time){
-        this.id = id;
-        this.author = author;
-        this.loggedInUserId = loggedInUserId;
-        this.content = content;
-        this.shareId = shareId;
-        this.like_num = like_num;
-        this.time = time;
-    }
-    public String getId(){
+
+    public String getId( ) {
         return id;
     }
-    public String getAuthor(){
-        return author;
+
+    public Share getShare( ) {
+        return share;
     }
-    public String getLoggedInUserId(){
-        return loggedInUserId;
+
+    public User getCreator( ) {
+        return creator;
     }
-    public String getContent(){
+
+    public User getTimelineUser( ) {
+        return timelineUser;
+    }
+
+    public String getContent( ) {
         return content;
     }
-    public String getShareId(){
-        return shareId;
-    }
-    public int getLike_num(){
-        return like_num;
-    }
-    public String getTime(){
+
+    public LocalDateTime getTime( ) {
         return time;
     }
-    public void setId(String id){
+
+    public String getImageUrl( ) {
+        return imageUrl;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
-    public void setAuthor(String author){
-        this.author = author;
+
+    public void setShare(Share share) {
+        this.share = share;
     }
-    public void setLoggedInUserId(String loggedInUserId){
-        this.loggedInUserId = loggedInUserId;
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
-    public void setContent(String content){
+
+    public void setTimelineUser(User timelineUser) {
+        this.timelineUser = timelineUser;
+    }
+
+    public void setContent(String content) {
         this.content = content;
     }
-    public void setShareId(String shareId){
-        this.shareId = shareId;
-    }
-    public void setLike_num(int like_num){
-        this.like_num = like_num;
-    }
-    public void setTime(String time){
+
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
 

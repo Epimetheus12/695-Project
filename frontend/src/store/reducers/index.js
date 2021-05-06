@@ -2,10 +2,21 @@ import { registerReducer, loginReducer, registerErrorReducer, loginErrorReducer,
 import { ajaxStatusReducer, ajaxErrorReducer } from './ajaxReducer';
 import { addPictureReducer, removePictureReducer, fetchPictureReducer, changePictureReducer } from './pictureReducer';
 import {
-    /*fetchAllChatFriendsReducer,*/ loggedInUserDataReducer, timeLineUserDataReducer, fetchAllFriendsReducer,
-    updateUserReducer, /*fetchAllUsersReducer, promoteUserReducer, demoteUserReducer, */changeTimeLineUserDataReducer,
-    changeAllFriendsReducer,removeFriendReducer, /*deleteUserReducer, */findFriendsReducer, addFriendReducer,
-    cancelRequestReducer, confirmRequestReducer, searchResultsReducer,
+    /*fetchAllChatFriendsReducer,*/
+    loggedInUserDataReducer,
+    timeLineUserDataReducer,
+    fetchAllFriendsReducer,
+    updateUserReducer, /*fetchAllUsersReducer, promoteUserReducer, demoteUserReducer, */
+    changeTimeLineUserDataReducer,
+    changeAllFriendsReducer,
+    removeFriendReducer, /*deleteUserReducer, */
+    findFriendsReducer,
+    addFriendReducer,
+    cancelRequestReducer,
+    confirmRequestReducer,
+    searchResultsReducer,
+    fetchAllFollowerReducer,
+    changeAllFollowerReducer,
 } from './userReducer';
 /*import { fetchAllMessagesReducer, fetchAllUnreadMessagesReducer, triggerMessageLoadReducer } from './messagesReducer';*/
 import { createPostReducer, fetchAllPostsReducer, removePostReducer, addLikePostReducer } from './postReducer';
@@ -53,5 +64,7 @@ export default {
     cancelRequest: cancelRequestReducer,
     confirmRequest: confirmRequestReducer,
     searchResults: searchResultsReducer,
+    fetchAllFollower: fetchAllFollowerReducer,
+    changeAllFollower: changeAllFollowerReducer
 /*    triggerMessageLoad: triggerMessageLoadReducer,*/
 };

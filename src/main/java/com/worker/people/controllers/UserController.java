@@ -1,7 +1,6 @@
 package com.worker.people.controllers;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worker.people.domain.entities.User;
 import com.worker.people.domain.models.*;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import static com.worker.people.utils.messages.ResponseMessage.*;
 
 import javax.validation.Valid;
@@ -86,9 +86,8 @@ public class UserController {
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateTutorial(@RequestBody @Valid UserUpdateModel userUpdateModel,
-                                               @PathVariable(value = "id") String loggedInUserId) throws Exception{/*
+                                         @PathVariable(value = "id") String loggedInUserId) throws Exception{/*
         Optional<User> userData = userRepository.findById(id);
-
         if (userData.isPresent()){
             User _user = userData.get();
             _user.setUsername(user.getUsername());
@@ -103,7 +102,6 @@ public class UserController {
             _user.setLastName(user.getLastName());
             _user.setAddress(user.getAddress());
             _user.setHobby(user.getHobby());
-
             return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -163,12 +161,107 @@ public class UserController {
         String loggedInUserId = (String) body.get("loggedInUserId");
         String search = (String) body.get("search");
 
-        List<User> users = userRepository.findByUsernameOrFirstNameOrLastNameOrNicknameLike(search, search, search, search);
+        List<User> users = userRepository.findAllByUsernameOrFirstNameOrLastNameOrNicknameLike(search, search, search, search);
 
         return users.stream().
                 filter(user -> !user.getId().equals(loggedInUserId)).
-                map(user -> this.modelMapper.map(user, FriendsCandidatesViewModel.class)).
+                map(user -> {
+                   FriendsCandidatesViewModel friendsCandidatesViewModel = this.modelMapper.map(user, FriendsCandidatesViewModel.class);
+                   Optional<User> loggedInUser = userRepository.findById(loggedInUserId);
+                   if (loggedInUser.isPresent()){
+                       if(loggedInUser.get().getFollowed() == null){
+                           return friendsCandidatesViewModel;
+                       }
+                       else if(loggedInUser.get().getFollowed().contains(friendsCandidatesViewModel.getId())){
+                           friendsCandidatesViewModel.setIsFollowed(true);
+                           return friendsCandidatesViewModel;
+                       }
+                   }
+                   return friendsCandidatesViewModel;
+                }).
                 collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "/addFriend", produces = "application/json", method = RequestMethod.POST)
+    public ResponseEntity addFollowed(@RequestBody Map<String, Object> body) throws Exception{
+        String loggedInUserId = (String) body.get("loggedInUserId");
+        String friendCandidateId = (String) body.get("friendCandidateId");
+
+        Optional<User> user = userRepository.findById(loggedInUserId);
+        Optional<User> friend = userRepository.findById(friendCandidateId);
+        if(user.isPresent() && friend.isPresent()){
+            if (!user.get().getFollowed().contains(friendCandidateId)){
+                user.get().getFollowed().add(friendCandidateId);
+            }
+            if (!friend.get().getFollower().contains((loggedInUserId))){
+                friend.get().getFollower().add(loggedInUserId);
+            }
+            userRepository.save(friend.get());
+            userRepository.save(user.get());
+            SuccessResponse successResponse = new SuccessResponse(LocalDateTime.now(), SUCCESSFUL_FRIEND_REQUEST_SUBMISSION_MESSAGE, "", true);
+
+            return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);
+        }
+
+
+        throw new CustomException(SERVER_ERROR_MESSAGE);
+    }
+
+    @RequestMapping(value = "/followed/{userId}", method = RequestMethod.GET)
+    public List<FriendsCandidatesViewModel> allFollowed(@PathVariable String userId) {
+
+        Optional<User> user = userRepository.findById(userId);
+
+        if(user.isPresent()){
+            List<String> followeds = user.get().getFollowed();
+            List<User> users = userRepository.findByIdIn(followeds);
+            return users.stream().
+                    map(userTemp -> this.modelMapper.map(userTemp, FriendsCandidatesViewModel.class)).
+                    collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
+    @RequestMapping(value = "/follower/{userId}", method = RequestMethod.GET)
+    public List<FriendsCandidatesViewModel> allFollower(@PathVariable String userId) {
+
+        Optional<User> user = userRepository.findById(userId);
+
+        if(user.isPresent()){
+            List<String> followers = user.get().getFollower();
+            List<User> users = userRepository.findByIdIn(followers);
+            return users.stream().
+                    map(userTemp -> this.modelMapper.map(userTemp, FriendsCandidatesViewModel.class)).
+                    collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
+    @RequestMapping(value = "/removeFriend", produces = "application/json", method = RequestMethod.POST)
+    public ResponseEntity removeFollowed(@RequestBody Map<String, Object> body) throws Exception{
+        String loggedInUserId = (String) body.get("loggedInUserId");
+        String friendToRemoveId = (String) body.get("friendToRemoveId");
+
+        Optional<User> user = userRepository.findById(loggedInUserId);
+        Optional<User> friend = userRepository.findById(friendToRemoveId);
+        if(user.isPresent() && friend.isPresent()){
+            if(user.get().getFollowed() != null){
+                user.get().getFollowed().remove(friendToRemoveId);
+            }
+            if (friend.get().getFollower() != null){
+                friend.get().getFollower().remove(loggedInUserId);
+            }
+            userRepository.save(friend.get());
+            userRepository.save(user.get());
+            SuccessResponse successResponse = new SuccessResponse(LocalDateTime.now(), SUCCESSFUL_FRIEND_REQUEST_SUBMISSION_MESSAGE, "", true);
+
+            return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);
+        }
+
+
+        throw new CustomException(SERVER_ERROR_MESSAGE);
     }
 
 }

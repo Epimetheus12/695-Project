@@ -43,7 +43,7 @@ class UserEditPage extends Component {
         const currentTimeLineUserId = this.props.match.params.id
         if (currentTimeLineUserId !== this.props.timeLineUserData.id) {
             this.props.changeTimeLineUser(currentTimeLineUserId);
-/*            this.props.changeAllPictures(currentTimeLineUserId);*/
+            /*            this.props.changeAllPictures(currentTimeLineUserId);*/
             this.props.changeAllFriends(currentTimeLineUserId);
         }
     }
@@ -192,21 +192,6 @@ class UserEditPage extends Component {
 
                                 <div className="section-container w-100 mx-auto text-center">
                                     <section className="left-section">
-                                        {/* <div className="form-group">
-                                <label htmlFor="username" className="font-weight-bold" >Username</label>
-                                <input
-                                    type="text"
-                                    className={"form-control " + (shouldMarkError('username') ? "error" : "")}
-                                    id="username"
-                                    name="username"
-                                    value={this.state.username}
-                                    onChange={this.onChangeHandler}
-                                    onBlur={this.handleBlur('username')}
-                                    aria-describedby="usernameHelp"
-                                    placeholder="Enter username"
-                                />
-                                {shouldMarkError('username') && <small id="usernameHelp" className="form-text alert alert-danger"> {(!this.state.username ? 'Username is required!' : 'Username should be at least 4 and maximum 16 characters long!')}</small>}
-                            </div> */}
 
                                         <div className="form-group">
                                             <label htmlFor="firstName" className="font-weight-bold" >First Name</label>
@@ -259,21 +244,6 @@ class UserEditPage extends Component {
                                     </section>
 
                                     <section className="right-section">
-                                        {/* <div className="form-group">
-                                <label htmlFor="email" className="font-weight-bold">Email Address</label>
-                                <input
-                                    type="email"
-                                    className={"form-control " + (shouldMarkError('email') ? "error" : "")}
-                                    id="email"
-                                    name="email"
-                                    value={this.state.email}
-                                    onChange={this.onChangeHandler}
-                                    onBlur={this.handleBlur('email')}
-                                    aria-describedby="emailHelp"
-                                    placeholder="Enter email"
-                                />
-                                {shouldMarkError('email') && <small id="emailHelp" className="form-text alert alert-danger">{(!this.state.email ? 'Email is required!' : 'Invalid e-mail address!')}</small>}
-                            </div> */}
 
                                         <div className="form-group">
                                             <label htmlFor="lastName" className="font-weight-bold">Last Name</label>
@@ -356,7 +326,7 @@ const mapDispatchToProps = (dispatch) => {
         updateUser: (loggedInUserId, userData) => { dispatch(updateUserAction(loggedInUserId, userData)) },
         changeTimeLineUser: (userId) => { dispatch(changeCurrentTimeLineUserAction(userId)) },
         changeAllFriends: (userId) => { dispatch(changeAllFriendsAction(userId)) },
-/*        changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },*/
+        /*        changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },*/
     }
 }
 

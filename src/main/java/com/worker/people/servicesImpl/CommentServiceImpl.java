@@ -31,24 +31,25 @@ import java.util.concurrent.CompletableFuture;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final ShareRepository postRepository;
+    private final ShareRepository shareRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
     private final CommentValidation commentValidation;
     private final UserValidation userValidation;
-    private final ShareValidation postValidation;
+    private final ShareValidation shareValidation;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ShareRepository postRepository, RoleRepository roleRepository, ModelMapper modelMapper, CommentValidation commentValidation, UserValidation userValidation, ShareValidation postValidation) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ShareRepository shareRepository, RoleRepository roleRepository, ModelMapper modelMapper, CommentValidation commentValidation, UserValidation userValidation, ShareValidation shareValidation) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-        this.postRepository = postRepository;
+        this.shareRepository = shareRepository;
         this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
         this.commentValidation = commentValidation;
         this.userValidation = userValidation;
-        this.postValidation = postValidation;
+        this.shareValidation = shareValidation;
     }
+
 
     @Override
     public boolean createComment(CommentCreateModel commentCreateBindingModel) throws Exception {
@@ -64,25 +65,32 @@ public class CommentServiceImpl implements CommentService {
                 .findById(commentCreateBindingModel.getTimelineUserId())
                 .orElse(null);
 
-        Share post = this.postRepository
-                .findById(commentCreateBindingModel.getPostId())
+        Share share = this.shareRepository
+                .findById(commentCreateBindingModel.getShareId())
                 .orElse(null);
 
-        if (!userValidation.isValid(creator) || !userValidation.isValid(timelineUser) || !postValidation.isValid(post)) {
+        if (!userValidation.isValid(creator) || !userValidation.isValid(timelineUser) || !shareValidation.isValid(share)) {
             throw new Exception(SERVER_ERROR_MESSAGE);
         }
 
         CommentServiceModel commentServiceModel = new CommentServiceModel();
-        commentServiceModel.setShareId(post.getId());
-        commentServiceModel.setAuthorId(creator.getId());
+        commentServiceModel.setShareId(share.getId());
+        commentServiceModel.setCreator(creator);
         commentServiceModel.setTimelineUser(timelineUser);
         commentServiceModel.setContent(commentCreateBindingModel.getContent());
         commentServiceModel.setTime(LocalDateTime.now());
-//        commentServiceModel.setImageUrl(commentCreateBindingModel.getImageUrl());
+        commentServiceModel.setImageUrl(commentCreateBindingModel.getImageUrl());
 
         Comment comment = this.modelMapper.map(commentServiceModel, Comment.class);
 
-        return this.commentRepository.save(comment) != null;
+        Comment newComment = this.commentRepository.save(comment);
+        share.getCommentList().add(newComment.getId());
+
+        if(newComment.getId() != null){
+            shareRepository.save(share);
+            return true;
+        }
+        return false;
     }
 
     @Async
@@ -97,12 +105,13 @@ public class CommentServiceImpl implements CommentService {
 
         Role rootRole = this.roleRepository.findByAuthority("ROOT");
         boolean hasRootAuthority = loggedInUser.getAuthorities().contains(rootRole);
-        boolean isCommentCreator = commentToRemove.getAuthor().equals(loggedInUserId);
-        boolean isTimeLineUser = commentToRemove.getLoggedInUserId().equals(loggedInUserId);
+        boolean isCommentCreator = commentToRemove.getCreator().getId().equals(loggedInUserId);
+        boolean isTimeLineUser = commentToRemove.getTimelineUser().getId().equals(loggedInUserId);
 
         if (hasRootAuthority || isCommentCreator || isTimeLineUser) {
             try {
                 this.commentRepository.delete(commentToRemove);
+                //TODO
                 return CompletableFuture.completedFuture(true);
             } catch (Exception e) {
                 throw new CustomException(SERVER_ERROR_MESSAGE);

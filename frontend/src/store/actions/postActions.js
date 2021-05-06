@@ -30,11 +30,13 @@ const createPostError = (error, message, status, path) => {
     }
 }
 
-const createPostAction = (timelineUserId, loggedInUserId, content, imageUrl) => {
-    const requestBody = { timelineUserId, loggedInUserId, content, imageUrl }
+const createPostAction = (timelineUserId, data) => {
+    /*console.log("=================="+datas);*/
+    /*const requestBody = { timelineUserId, loggedInUserId, content, datas}*/
+
     return (dispatch) => {
         dispatch(createPostBegin())
-        return requester.post('/share/create', requestBody, (response) => {
+        return requester.addPhoto('/api/share/create', data, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(createPostError(error, message, status, path));
@@ -78,7 +80,7 @@ const fetchAllPostsError = (error, message, status, path) => {
 const fetchAllPostsAction = (userId) => {
     return (dispatch) => {
         dispatch(fetchAllPostsBegin())
-        return requester.get('/share/all/' + userId, (response) => {
+        return requester.get('/api/share/all/' + userId, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(fetchAllPostsError(error, message, status, path));
@@ -122,7 +124,7 @@ const removePostAction = (loggedInUserId, postToRemoveId, timelineUserId) => {
     const requestBody = { loggedInUserId, postToRemoveId }
     return (dispatch) => {
         dispatch(removePostBegin())
-        return requester.post('/post/remove', requestBody, (response) => {
+        return requester.post('/api/share/remove', requestBody, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(removePostError(error, message, status, path));
@@ -164,11 +166,34 @@ const addLikePostError = (error, message, status, path) => {
     }
 }
 
+/*const fetchCommentSuccess = (response) => {
+    return {
+        type: "Fetch_Comment_Success",
+        payload: response
+    }
+}
+
+const fetchCommentBegin = () => {
+    return {
+        type: "Fetch_Comment_Begin",
+    }
+}
+
+const fetchCommentError = (error, message, status, path) => {
+    return {
+        type: "Fetch_Comment_Error",
+        error,
+        message,
+        status,
+        path,
+    }
+}*/
+
 const addLikePostAction = (loggedInUserId, postId, timelineUserId) => {
     const requestBody = { postId, loggedInUserId }
     return (dispatch) => {
         dispatch(addLikePostBegin())
-        return requester.post('/like/add', requestBody, (response) => {
+        return requester.post('/api/share/like', requestBody, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(addLikePostError(error, message, status, path));
@@ -185,4 +210,24 @@ const addLikePostAction = (loggedInUserId, postId, timelineUserId) => {
     }
 }
 
-export { createPostAction, fetchAllPostsAction, removePostAction, addLikePostAction, };
+/*const fetchAllCommentAction = (shareId) => {
+    const requestBody = { shareId }
+    return (dispatch) => {
+        dispatch(fetchCommentBegin())
+        return requester.get(`/api/share/comment/${shareId}`, requestBody, (response) => {
+            if (response.error) {
+                const { error, message, status, path } = response;
+                dispatch(addLikePostError(error, message, status, path));
+            } else {
+                dispatch(fetchCommentSuccess(response));
+            }
+        }).catch(err => {
+            if (err.status === 403 && err.message === 'Your JWT token is expired. Please log in!') {
+                localStorage.clear();
+            }
+            dispatch(fetchCommentError('', `Error: ${err.message}`, err.status, ''));
+        })
+    }
+}*/
+
+export { createPostAction, fetchAllPostsAction, removePostAction, addLikePostAction};

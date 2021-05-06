@@ -217,15 +217,15 @@ class Navbar extends Component {
                                     {loggedIn && <li className="nav-item"><NavLink exact to={`/home/findFriends/${userId}`} className="nav-link " >Find friends!</NavLink></li>}
 
 
-                                    {loggedIn &&
+                                    {/*{loggedIn &&
                                     <li className="nav-item">
                                         <NavLink exact to={`/home/friendRequests/${userId}`} className="nav-link tooltipCustom">
                                             <i className="fas fa-user-friends"></i>
                                             {isFriendRequestsArrEmpty && <span id="icon-badge-container-friend-requests">{this.props.friendRequestsArr.length}</span>}
-                                            {/* <i id="icon-badge-container-friend-requests" data-count="2" className="fas fa-user-friends"></i> */}
+                                             <i id="icon-badge-container-friend-requests" data-count="2" className="fas fa-user-friends"></i>
                                             <span className="tooltiptextCustom" id="friend-requests-tooltip">Friend Requests</span>
                                         </NavLink>
-                                    </li>}
+                                    </li>}*/}
 
                                     {/*{loggedIn && pathname &&
                                     <li className="nav-item"

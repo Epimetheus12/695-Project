@@ -39,8 +39,8 @@ export default class Friend extends Component {
 
         const { id, firstName, lastName, firstButtonText, secondButtonText, firstButtonLink, secondButtonLink,
             firstButtonOnClick, secondButtonOnClick } = this.state;
-        const backgroundImageUrl = this.state.backgroundImageUrl || default_background_image
-        const profilePicUrl = this.state.profilePicUrl || placeholder_user_image
+        const backgroundImageUrl = this.state.backgroundPicURL || default_background_image
+        const profilePicUrl = this.state.profilePicURL || placeholder_user_image
 
         let imgClassName = '';
         if (profilePicUrl) {

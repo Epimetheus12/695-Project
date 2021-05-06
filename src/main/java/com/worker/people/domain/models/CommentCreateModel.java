@@ -9,17 +9,16 @@ public class CommentCreateModel {
     private String loggedInUserId;
     private String timelineUserId;
     private String content;
-    private LocalDateTime time;
-    /*private String imageUrl;*/
+    private String imageUrl;
 
     @NotNull
     @NotEmpty
-    public String getPostId() {
+    public String getShareId() {
         return this.shareId;
     }
 
-    public void setPostId(String postId) {
-        this.shareId = postId;
+    public void setShareId(String shareId) {
+        this.shareId = shareId;
     }
 
     @NotNull
@@ -52,19 +51,12 @@ public class CommentCreateModel {
         this.content = content;
     }
 
-    /*public String getImageUrl() {
+    public String getImageUrl() {
         return this.imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }*/
-
-    public LocalDateTime getTime( ) {
-        return time;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
 }

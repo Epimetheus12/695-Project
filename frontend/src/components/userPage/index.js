@@ -6,6 +6,9 @@ import UserEditPage from './UserEditPage';
 import UserAllFriendPage from './UserAllFriendsPage';
 import UserFindFriendsPage from './UserFindFriendPage';
 import UserSearchResultsPage from './UserSearchResultsPage';
+import UserFollowedPage from "./UserFollowedPage";
+import UserFollowerPage from "./UserFollowerPage";
+import UserGalleryPage from "./UserGalleryPage";
 // import UserGalleryPage from './UserGalleryPage';
 
 export {
@@ -15,6 +18,8 @@ export {
     // UserAllPage,
     UserAllFriendPage,
     UserFindFriendsPage,
-    UserSearchResultsPage/*,
-    UserGalleryPage*/
+    UserSearchResultsPage,
+    UserGalleryPage,
+    UserFollowedPage,
+    UserFollowerPage
 }

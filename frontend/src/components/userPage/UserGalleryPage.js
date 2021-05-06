@@ -9,7 +9,11 @@ import { css } from '@emotion/react';
 import { RingLoader, GridLoader, MoonLoader, CircleLoader } from 'react-spinners';
 
 import { connect } from 'react-redux';
-import { changeCurrentTimeLineUserAction, changeAllFriendsAction } from '../../store/actions/userActions';
+import {
+    changeCurrentTimeLineUserAction,
+    changeAllFriendsAction,
+    changeAllFollowerAction
+} from '../../store/actions/userActions';
 import { addPicturesAction, changeAllPicturesAction, removePictureAction } from '../../store/actions/pictureActions';
 
 const override = css`
@@ -40,7 +44,9 @@ class UserGalleryPage extends Component {
             this.props.changeTimeLineUser(currentTimeLineUserId);
             this.props.changeAllPictures(currentTimeLineUserId);
             this.props.changeAllFriends(currentTimeLineUserId);
+
         }
+        this.props.changeAllFollower(currentTimeLineUserId);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -224,6 +230,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         changeTimeLineUser: (userId) => { dispatch(changeCurrentTimeLineUserAction(userId)) },
         changeAllFriends: (userId) => { dispatch(changeAllFriendsAction(userId)) },
+        changeAllFollower: (userId) => {dispatch(changeAllFollowerAction(userId))},
         changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },
         addImage: (data, userId) => { dispatch(addPicturesAction(data, userId)) },
         removeImage: (loggedInUserId, photoToRemoveId, timeLineUserId) => { dispatch(removePictureAction(loggedInUserId, photoToRemoveId, timeLineUserId)) },

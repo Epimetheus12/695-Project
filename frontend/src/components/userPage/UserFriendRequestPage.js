@@ -6,7 +6,15 @@ import FriendRequest from './FriendRequest';
 import './css/UserFriends.css';
 
 import { connect } from 'react-redux';
-import { changeCurrentTimeLineUserAction, changeAllFriendsAction, findFriendsAction, cancelRequestAction, confirmRequestAction } from '../../store/actions/userActions';
+import {
+    changeCurrentTimeLineUserAction,
+    changeAllFriendsAction,
+    findFriendsAction,
+    cancelRequestAction,
+    confirmRequestAction,
+    changeAllFollowerAction
+} from '../../store/actions/userActions';
+import {changeAllPicturesAction} from "../../store/actions/pictureActions";
 /*import { changeAllPicturesAction } from '../../store/actions/pictureActions';*/
 
 class UserFriendRequestsPage extends Component {
@@ -28,6 +36,7 @@ class UserFriendRequestsPage extends Component {
             this.props.changeTimeLineUser(loggedInUserId);
 /*            this.props.changeAllPictures(loggedInUserId);*/
             this.props.changeAllFriends(loggedInUserId);
+            this.props.changeAllFollower(loggedInUserId);
         }
 
         this.props.findFriends(loggedInUserId);
@@ -165,7 +174,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         changeTimeLineUser: (userId) => { dispatch(changeCurrentTimeLineUserAction(userId)) },
         changeAllFriends: (userId) => { dispatch(changeAllFriendsAction(userId)) },
-/*        changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },*/
+        changeAllFollower: (userId) => {dispatch(changeAllFollowerAction(userId))},
+        changeAllPictures: (userId) => { dispatch(changeAllPicturesAction(userId)) },
         findFriends: (userId) => { dispatch(findFriendsAction(userId)) },
         cancelRequest: (loggedInUserId, friendToRejectId) => { dispatch(cancelRequestAction(loggedInUserId, friendToRejectId)) },
         acceptRequest: (loggedInUserId, friendToAcceptId) => { dispatch(confirmRequestAction(loggedInUserId, friendToAcceptId)) },

@@ -38,10 +38,10 @@ export default class WriteComment extends Component {
         if (!this.canBeSubmitted()) {
             return;
         }
-        const postId = this.props.postId;
+        const shareId = this.props.postId;
         const { content, imageUrl } = this.state;
 
-        this.props.createComment(postId, content, imageUrl )
+        this.props.createComment(shareId, content, imageUrl )
     }
 
     onChangeHandler(event) {
@@ -75,7 +75,7 @@ export default class WriteComment extends Component {
         const isEnabled = !Object.keys(errors).some(x => errors[x]);
         const displayButon = isEnabled ? '' : 'hidden';
 
-        const loggedInUserProfilePicUrl = this.props.loggedInUser.profilePicUrl;
+        const loggedInUserProfilePicUrl = this.props.loggedInUser.profilePicURL;
         const imageClass = userService.getImageSize(loggedInUserProfilePicUrl);
         const loggedInUserFirstName = this.props.loggedInUser.firstName;
         const formattedName = userService.formatUsername(loggedInUserFirstName);
